@@ -86,7 +86,7 @@ function App() {
       <section className="reading-section" id="tiragem">
         <div className="reading-heading"><div className="section-kicker"><span/> SEU MOMENTO, SUA PERGUNTA</div><h2>O que merece sua <em>atenção hoje?</em></h2><p>Feche os olhos por alguns segundos. Pense em algo que gostaria de compreender melhor.</p></div>
         <div className="draw-area">
-          <div className={drawn?'drawn-card':'deck-card'}><div className="deck-pattern"><span>✳</span><i>✧</i><b>☾</b><small>ENTRELINHAS</small></div></div>
+          <div className={drawn?'drawn-card':'deck-card'}><div className="deck-pattern"><span>✳</span><i>✧</i><b>☾</b><small>LUME</small></div></div>
           <div className="draw-instruction"><span className="tiny-star">✳</span><h3>{drawn?'Sua carta está aqui.':'Quando sentir que é a hora...'}</h3><p>{drawn?'Leia sem pressa. Fique apenas com o que conversar com você.':'Não existe escolha certa. Apenas um convite para olhar para dentro.'}</p><button className="primary-button" onClick={drawCard}>{drawn?'Tirar outra carta':'Revelar minha carta'} <ArrowRight size={17}/></button>{drawn&&<button className="reset-button" onClick={()=>setDrawn(null)}><RotateCcw size={14}/> Recomeçar</button>}</div>
         </div>
         {drawn&&<div className="result" id="reading">
