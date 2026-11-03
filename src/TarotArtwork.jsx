@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useId } from 'react';
 
 const majorSymbols = {
   'O Louco': '✳', 'O Mago': '✧', 'A Sacerdotisa': '☾', 'A Imperatriz': '❀',
@@ -39,6 +39,7 @@ function MajorScene({ name }) {
 }
 
 export default function TarotArtwork({ card, compact = false }) {
+  const uid = useId().replace(/:/g, '');
   const name = card?.name || '';
   const isMinor = card?.arcana === 'menores';
   const symbol = majorSymbols[name] || card?.symbol || '✧';
@@ -47,11 +48,11 @@ export default function TarotArtwork({ card, compact = false }) {
   const pips = Array.from({ length: pipCount }, (_, i) => i);
   return <svg className={compact ? 'tarot-art tarot-art-compact' : 'tarot-art'} viewBox="0 0 180 260" role="img" aria-label={`Ilustração simbólica de ${name || 'uma carta de tarot'}`}>
     <defs>
-      <linearGradient id="lume-paper" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#f4edda"/><stop offset="1" stopColor="#d9c9a5"/></linearGradient>
-      <pattern id="lume-grain" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="2" cy="3" r=".6" fill="#8b7956" opacity=".25"/><circle cx="9" cy="9" r=".45" fill="#8b7956" opacity=".2"/></pattern>
+      <linearGradient id={`lume-paper-${uid}`} x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#f4edda"/><stop offset="1" stopColor="#d9c9a5"/></linearGradient>
+      <pattern id={`lume-grain-${uid}`} width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="2" cy="3" r=".6" fill="#8b7956" opacity=".25"/><circle cx="9" cy="9" r=".45" fill="#8b7956" opacity=".2"/></pattern>
     </defs>
-    <rect x="3" y="3" width="174" height="254" rx="3" fill="url(#lume-paper)"/>
-    <rect x="3" y="3" width="174" height="254" rx="3" fill="url(#lume-grain)"/>
+    <rect x="3" y="3" width="174" height="254" rx="3" fill={`url(#lume-paper-${uid})`}/>
+    <rect x="3" y="3" width="174" height="254" rx="3" fill={`url(#lume-grain-${uid})`}/>
     <rect x="9" y="9" width="162" height="242" fill="none" stroke="#526b58" strokeWidth="1"/>
     <rect x="13" y="13" width="154" height="234" fill="none" stroke="#b17e5d" strokeWidth=".65"/>
     <path d="M18 48 Q35 22 52 43 M162 48 Q145 22 128 43 M18 212 Q35 238 52 217 M162 212 Q145 238 128 217" fill="none" stroke="#75866c" strokeWidth="1.2"/>
