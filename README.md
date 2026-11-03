@@ -1,6 +1,6 @@
 # Lume — Tarot & autoconhecimento
 
-Uma experiência web de tarot pensada como um espaço de pausa e reflexão. O projeto usa a linguagem simbólica dos Arcanos Maiores para propor perguntas e leituras de autoconhecimento — sem tratar as cartas como previsões ou verdades absolutas.
+Uma experiência web de tarot pensada como um espaço de pausa e reflexão. O projeto usa a linguagem simbólica dos 78 arcanos (22 Maiores e 56 Menores) para propor perguntas e leituras de autoconhecimento — sem tratar as cartas como previsões ou verdades absolutas.
 
 ## Tecnologias
 - React
@@ -24,12 +24,12 @@ npm run preview
 ## O que já funciona
 - Página institucional responsiva.
 - Fluxo de tiragem de uma carta.
-- Sorteio entre os 22 Arcanos Maiores, sem repetir a carta imediatamente.
+- Sorteio entre os 78 arcanos, sem repetir a carta imediatamente.
 - Interpretação, pergunta para reflexão e sugestão prática em cada carta.
 - Navegação adaptada para dispositivos móveis.
 
 ## Próximas evoluções
-- Completar o baralho com os 56 Arcanos Menores.
+- Criar tiragens de três cartas.
 - Criar tiragens de três cartas.
 - Histórico local de leituras e opção de favoritar.
 - Testes automatizados e documentação da estrutura de dados.
