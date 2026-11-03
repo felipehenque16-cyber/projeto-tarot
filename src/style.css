@@ -19,3 +19,13 @@
 .focus-lens b{display:block;font-size:8px;letter-spacing:1.5px;color:#a16f50;margin-bottom:6px}
 .focus-lens p{font-size:11px;line-height:1.75;color:#596d59;margin:0}
 .spread-result>.focus-lens{margin:20px 0 0}
+
+
+/* Tiragem ampliada de cinco cartas */
+.spread-grid.spread-five{grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}
+.spread-five .spread-card{padding:13px 10px}
+.spread-five .spread-card h3{font-size:17px}
+.spread-five .mini-card{height:142px;max-width:98px}
+.spread-five .spread-card>p{font-size:9px}
+@media(max-width:980px){.spread-grid.spread-five{grid-template-columns:repeat(2,minmax(0,1fr))}.spread-grid.spread-five .spread-card:last-child{grid-column:1/-1}}
+@media(max-width:760px){.spread-grid.spread-five{grid-template-columns:1fr}.spread-grid.spread-five .spread-card:last-child{grid-column:auto}.spread-five .spread-card>p{font-size:11px}}
