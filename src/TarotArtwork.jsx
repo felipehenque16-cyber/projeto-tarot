@@ -9,6 +9,28 @@ const majorSymbols = {
   'O Julgamento': '♧', 'O Mundo': '✺'
 };
 
+function SceneBackdrop({ name, uid }) {
+  const warm = ['O Sol','A Imperatriz','O Mago','O Mundo'].includes(name);
+  const sky = warm ? '#e9bd78' : '#a9bdc0';
+  const earth = warm ? '#9d9a68' : '#657d70';
+  return <g aria-hidden="true">
+    <defs>
+      <linearGradient id={`lume-sky-${uid}`} x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stopColor={sky}/><stop offset="1" stopColor="#e8d9b7"/>
+      </linearGradient>
+      <linearGradient id={`lume-ground-${uid}`} x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stopColor={earth}/><stop offset="1" stopColor="#435e4c"/>
+      </linearGradient>
+    </defs>
+    <rect x="15" y="18" width="150" height="190" fill={`url(#lume-sky-${uid})`}/>
+    <circle cx="132" cy="47" r="15" fill="#f7e4ae" opacity=".9"/>
+    <path d="M15 137 L43 91 L66 125 L91 77 L126 132 L149 96 L165 133 V208 H15Z" fill="#879b83" opacity=".9"/>
+    <path d="M15 157 Q48 129 77 151 T165 145 V208 H15Z" fill={`url(#lume-ground-${uid})`}/>
+    <path d="M15 179 Q54 159 88 178 T165 172" fill="none" stroke="#d9c49a" strokeWidth="2" opacity=".8"/>
+    <g fill="#e7d6ad" opacity=".75"><circle cx="35" cy="42" r="1.5"/><circle cx="58" cy="61" r="1"/><circle cx="104" cy="34" r="1.2"/><circle cx="148" cy="76" r="1.4"/></g>
+  </g>;
+}
+
 function MajorScene({ name }) {
   const common = { fill: 'none', stroke: '#526b58', strokeWidth: 1.5, strokeLinecap: 'round', strokeLinejoin: 'round' };
   switch (name) {
@@ -57,7 +79,9 @@ export default function TarotArtwork({ card, compact = false }) {
     <rect x="13" y="13" width="154" height="234" fill="none" stroke="#b17e5d" strokeWidth=".65"/>
     <path d="M18 48 Q35 22 52 43 M162 48 Q145 22 128 43 M18 212 Q35 238 52 217 M162 212 Q145 238 128 217" fill="none" stroke="#75866c" strokeWidth="1.2"/>
     <g fill="#b17e5d"><circle cx="24" cy="28" r="2"/><circle cx="156" cy="28" r="2"/><circle cx="24" cy="232" r="2"/><circle cx="156" cy="232" r="2"/></g>
+    <SceneBackdrop name={name} uid={uid}/>
     {!isMinor ? <g>
+      <rect x="15" y="18" width="150" height="190" fill="none" stroke="#f3e6c7" strokeWidth="1.5"/>
       <circle cx="90" cy="112" r="60" fill="none" stroke="#b17e5d" strokeWidth=".8" strokeDasharray="2 5"/>
       <MajorScene name={name}/>
       <text x="90" y="215" textAnchor="middle" fontSize="7" letterSpacing="1.6" fill="#8a674e">{name.toLocaleUpperCase('pt-BR')}</text>
@@ -67,6 +91,8 @@ export default function TarotArtwork({ card, compact = false }) {
       <path d="M40 184 Q90 205 140 184" stroke="#b17e5d" strokeWidth="1" fill="none"/>
       <text x="90" y="215" fontSize="7" letterSpacing="1.6" fill="#8a674e">{suit} • {card?.number?.toUpperCase()}</text>
     </g>}
+    <rect x="3" y="3" width="174" height="254" rx="3" fill="none" stroke="#334b3d" strokeWidth="2"/>
+    <text x="19" y="27" textAnchor="start" fontSize="10" fontFamily="Georgia,serif" fill="#334b3d">{card?.number || '0'}</text>
     <text x="90" y="239" textAnchor="middle" fontSize="7" letterSpacing="1.5" fill="#526b58">L U M E</text>
   </svg>;
 }
