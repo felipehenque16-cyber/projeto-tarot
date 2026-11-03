@@ -68,7 +68,9 @@ function MinorScene({ card }) {
   const colors = { Paus:['#a45f43','#6f815d'], Copas:['#668a91','#b58b75'], Espadas:['#65768b','#9b9b91'], Ouros:['#b18a4e','#788b69'] };
   const [accent, secondary] = colors[suit];
   const court = /Pajem|Cavaleiro|Rainha|Rei/.test(name);
-  const count = name.startsWith('Ás') ? 1 : Math.min(10, Number((name.match(/^(Dois|Três|Quatro|Cinco|Seis|Sete|Oito|Nove|Dez)/)?.[1] && ({Dois:2,Três:3,Quatro:4,Cinco:5,Seis:6,Sete:7,Oito:8,Nove:9,Dez:10})[name.match(/^(Dois|Três|Quatro|Cinco|Seis|Sete|Oito|Nove|Dez)/)[1]) || 3));
+  const rankMatch = name.match(/^(Dois|Três|Quatro|Cinco|Seis|Sete|Oito|Nove|Dez)/);
+  const rankCounts = { Dois: 2, Três: 3, Quatro: 4, Cinco: 5, Seis: 6, Sete: 7, Oito: 8, Nove: 9, Dez: 10 };
+  const count = name.startsWith('Ás') ? 1 : (rankCounts[rankMatch?.[1]] || 3);
   const glyph = suit === 'Paus' ? '♧' : suit === 'Copas' ? '♡' : suit === 'Espadas' ? '⚔' : '◇';
   return <g>
     <path d="M18 147Q45 117 70 143T120 138T162 144V207H18Z" fill={secondary}/>
