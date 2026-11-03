@@ -31,12 +31,14 @@ const fullDeck = [...cards, ...minorCards];
 
 function App() {
   const [drawn, setDrawn] = useState(null);
+  const [spread, setSpread] = useState([]);
+  const [mode, setMode] = useState('single');
+  const [focus, setFocus] = useState('autoconhecimento');
   const [menuOpen, setMenuOpen] = useState(false);
   const drawCard = () => {
-    let next = fullDeck[Math.floor(Math.random() * fullDeck.length)];
-    if (drawn && fullDeck.length > 1) while (next.name === drawn.name) next = fullDeck[Math.floor(Math.random() * fullDeck.length)];
-    setDrawn(next);
-    window.setTimeout(() => document.getElementById('reading')?.scrollIntoView({behavior:'smooth',block:'start'}), 80);
+    if (mode === 'three') { const deck = [...fullDeck].sort(() => Math.random() - 0.5); setSpread(deck.slice(0,3)); setDrawn(null); }
+    else { let next = fullDeck[Math.floor(Math.random() * fullDeck.length)]; if (drawn) while (next.name === drawn.name) next = fullDeck[Math.floor(Math.random() * fullDeck.length)]; setDrawn(next); setSpread([]); }
+    window.setTimeout(() => document.getElementById('reading')?.scrollIntoView({behavior:'smooth',block:'start'}), 100);
   };
 
   return <div className="site-shell">
@@ -85,12 +87,23 @@ function App() {
 
       <section className="reading-section" id="tiragem">
         <div className="reading-heading"><div className="section-kicker"><span/> SEU MOMENTO, SUA PERGUNTA</div><h2>O que merece sua <em>atenção hoje?</em></h2><p>Feche os olhos por alguns segundos. Pense em algo que gostaria de compreender melhor.</p></div>
-        <div className="draw-area">
-          <div className={drawn?'drawn-card':'deck-card'}><div className="deck-pattern"><span>✳</span><i>✧</i><b>☾</b><small>LUME</small></div></div>
-          <div className="draw-instruction"><span className="tiny-star">✳</span><h3>{drawn?'Sua carta está aqui.':'Quando sentir que é a hora...'}</h3><p>{drawn?'Leia sem pressa. Fique apenas com o que conversar com você.':'Não existe escolha certa. Apenas um convite para olhar para dentro.'}</p><button className="primary-button" onClick={drawCard}>{drawn?'Tirar outra carta':'Revelar minha carta'} <ArrowRight size={17}/></button>{drawn&&<button className="reset-button" onClick={()=>setDrawn(null)}><RotateCcw size={14}/> Recomeçar</button>}</div>
+        <div className="reading-choices">
+          <div className="choice-label">ESCOLHA O FOCO DA SUA REFLEXÃO</div>
+          <div className="topic-options">{[['autoconhecimento','Olhar para mim'],['amor','Amor e relações'],['trabalho','Trabalho e caminhos'],['decisoes','Escolhas e mudanças']].map(([v,l])=><button key={v} className={focus===v?'topic-option selected':'topic-option'} onClick={()=>{setFocus(v);setDrawn(null);setSpread([])}}>{l}</button>)}</div>
+          <div className="mode-options"><button className={mode==='single'?'mode-option selected':'mode-option'} onClick={()=>{setMode('single');setDrawn(null);setSpread([])}}>Uma carta<small>um olhar para o agora</small></button><button className={mode==='three'?'mode-option selected':'mode-option'} onClick={()=>{setMode('three');setDrawn(null);setSpread([])}}>Três cartas<small>passado · presente · possibilidades</small></button></div>
         </div>
+        <div className="draw-area">
+          <div className={drawn?'flip-card is-flipped':'flip-card'}><div className="flip-card-inner"><div className="flip-face flip-back"><div className="deck-pattern"><span>✳</span><i>✧</i><b>☾</b><small>LUME</small></div></div><div className="flip-face flip-front"><div className="front-frame"><small>{drawn?.number}</small><span>{drawn?.symbol}</span><b>{drawn?.name}</b><i>{drawn?.keyword}</i></div></div></div></div>
+          <div className="draw-instruction"><span className="tiny-star">✳</span><h3>{drawn||spread.length?'Sua tiragem está aqui.':'Quando sentir que é a hora...'}</h3><p>{drawn||spread.length?'Leia sem pressa. Fique com o que conversar com você.':'Não existe escolha certa. Apenas um convite para olhar para dentro.'}</p><button className="primary-button" onClick={drawCard}>{drawn||spread.length?'Fazer nova tiragem':mode==='three'?'Revelar as três cartas':'Revelar minha carta'} <ArrowRight size={17}/></button>{(drawn||spread.length>0)&&<button className="reset-button" onClick={()=>{setDrawn(null);setSpread([])}}><RotateCcw size={14}/> Recomeçar</button>}</div>
+        </div>
+        {spread.length===3&&<div className="result spread-result" id="reading">
+          <div className="result-top"><span>SUA TIRAGEM • TRÊS CARTAS</span><span className="result-tag">FOCO: {focus.toUpperCase()}</span></div>
+          <div className="spread-grid">{spread.map((card,i)=><article className="spread-card" key={card.name} style={{animationDelay:(i*180)+'ms'}}><div className="spread-position">{['01 — PASSADO','02 — PRESENTE','03 — POSSIBILIDADES'][i]}</div><div className="mini-card"><span>{card.symbol}</span><b>{card.name}</b><small>{card.number}</small></div><h3>{card.name}</h3><span className="spread-keyword">{card.keyword}</span><p>{card.meaning}</p><blockquote>“{card.reflection}”</blockquote><div className="spread-advice"><b>Um convite</b><p>{card.advice}</p></div></article>)}</div>
+          <div className="spread-synthesis"><span>OLHANDO PARA O CONJUNTO</span><p>Que relação você percebe entre <strong>{spread[0].keyword.toLowerCase()}</strong>, <strong>{spread[1].keyword.toLowerCase()}</strong> e <strong>{spread[2].keyword.toLowerCase()}</strong>? A conexão que você faz entre essas imagens também faz parte da leitura.</p></div>
+          <p className="result-disclaimer">Uma leitura simbólica para refletir sobre {focus==='amor'?'amor e relações':focus==='trabalho'?'trabalho e caminhos':focus==='decisoes'?'escolhas e mudanças':'autoconhecimento'}. As cartas não determinam o futuro.</p>
+        </div>}
         {drawn&&<div className="result" id="reading">
-          <div className="result-top"><span>SUA CARTA • {drawn.number}</span><span className="result-tag">{drawn.arcana === 'menores' ? 'ARCANOS MENORES' : 'ARCANOS MAIORES'}</span></div>
+          <div className="result-top"><span>SUA CARTA • {drawn.number} · FOCO: {focus.toUpperCase()}</span><span className="result-tag">{drawn.arcana === 'menores' ? 'ARCANOS MENORES' : 'ARCANOS MAIORES'}</span></div>
           <div className="result-content"><div className="result-symbol"><span>{drawn.symbol}</span><small>{drawn.number}</small></div><div className="result-copy"><div className="section-kicker">UMA MENSAGEM PARA REFLETIR</div><h2>{drawn.name}</h2><h4>{drawn.keyword}</h4><p>{drawn.meaning}</p><blockquote>“{drawn.reflection}”</blockquote><div className="advice"><Leaf size={17}/><div><b>Um convite para hoje</b><p>{drawn.advice}</p></div></div></div></div>
           <p className="result-disclaimer">Esta leitura é um exercício simbólico de autoconhecimento. Use sua própria percepção para construir seus caminhos.</p>
         </div>}
