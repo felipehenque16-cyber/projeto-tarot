@@ -31,7 +31,7 @@ function SceneBackdrop({ name, uid }) {
   </g>;
 }
 
-function MajorScene({ name }) {
+function MajorSymbol({ name }) {
   const common = { fill: 'none', stroke: '#526b58', strokeWidth: 1.5, strokeLinecap: 'round', strokeLinejoin: 'round' };
   switch (name) {
     case 'O Louco': return <g {...common}><path d="M90 150 Q55 130 48 85 Q75 105 90 112 Q105 105 132 85 Q125 130 90 150Z" fill="#a9b69a" stroke="none"/><path d="M90 148V78 M90 105L65 88 M90 118L116 96"/><circle cx="90" cy="65" r="10" fill="#d8b77d"/><path d="M57 176q33 15 66 0"/></g>;
@@ -58,6 +58,47 @@ function MajorScene({ name }) {
     case 'O Mundo': return <g {...common}><ellipse cx="90" cy="112" rx="48" ry="65" fill="none" stroke="#b17e5d" strokeWidth="3"/><circle cx="90" cy="112" r="24" fill="#d8c49a"/><path d="M90 88V136M66 112H114M90 88L104 112L90 136L76 112Z"/><path d="M34 58L45 75M146 58L135 75M34 166L45 149M146 166L135 149"/></g>;
     default: return null;
   }
+}
+
+
+function MajorFigure({ name }) {
+  const palette = {
+    'O Louco':['#b86f55','#d6bd8b'],'O Mago':['#a84f43','#e1c58e'],
+    'A Sacerdotisa':['#536b83','#d8d0b8'],'A Imperatriz':['#9b5e54','#d6b77e'],
+    'O Imperador':['#8d493f','#c6a15d'],'O Hierofante':['#a44e42','#d8c18b'],
+    'Os Enamorados':['#b86b55','#e0c99c'],'O Carro':['#526b83','#d3b36f'],
+    'A Justiça':['#9b554b','#d5c28f'],'O Eremita':['#7d806c','#d7c8a4'],
+    'A Roda da Fortuna':['#9b5e54','#d7bd87'],'A Força':['#b86f55','#e0c99c'],
+    'O Enforcado':['#536b83','#d6b77e'],'A Morte':['#4c5660','#d8d0b8'],
+    'A Temperança':['#d0b88d','#e6d9b8'],'O Diabo':['#654b4b','#c98a62'],
+    'A Torre':['#526b83','#d4b16f'],'A Estrela':['#8c9b83','#d9c69c'],
+    'A Lua':['#53627b','#c6b9a0'],'O Sol':['#c27a45','#e5c777'],
+    'O Julgamento':['#eee1c4','#b77c5d'],'O Mundo':['#69836e','#d9bd87']
+  };
+  const [robe, trim] = palette[name] || ['#526b58','#d8c49a'];
+  const seated = ['A Sacerdotisa','A Imperatriz','O Imperador','O Hierofante','A Justiça'].includes(name);
+  return <g stroke="#514b3d" strokeWidth="1.35" strokeLinejoin="round" strokeLinecap="round">
+    {seated && <g fill="#9a7953"><path d="M48 176V153H132V176Z"/><path d="M55 153L44 190M125 153L136 190" fill="none" strokeWidth="3"/><path d="M48 151Q90 133 132 151" fill="none" stroke="#e7d4aa" strokeWidth="3"/></g>}
+    <path d={seated ? "M65 103Q90 86 115 103L124 157Q90 172 56 157Z" : "M67 105Q90 91 113 105L128 184Q90 198 52 184Z"} fill={robe}/>
+    <path d="M78 108L90 139L102 108L108 169H72Z" fill={trim} opacity=".9"/>
+    <path d="M76 101Q90 91 104 101L109 116Q90 128 71 116Z" fill={robe}/>
+    <path d="M73 111L55 143M107 111L125 143" fill="none" stroke={robe} strokeWidth="9"/>
+    <path d="M72 143L58 154M108 143L122 154" fill="none" stroke="#d8b58c" strokeWidth="5"/>
+    <circle cx="90" cy="78" r="16" fill="#c58e69"/>
+    <path d="M74 77Q73 55 91 57Q108 57 106 78L101 70Q88 64 77 75Z" fill="#59483e"/>
+    <path d="M84 81H86M95 81H97" fill="none" strokeWidth="1.6"/>
+    <path d="M88 88Q90 90 93 88" fill="none" strokeWidth="1"/>
+    <path d="M80 61Q90 48 101 61" fill="none" stroke={trim} strokeWidth="4"/>
+    <path d="M62 185Q90 194 118 185" fill="none" stroke={trim} strokeWidth="2"/>
+    <circle cx="90" cy="120" r="3" fill="#e7d4aa" stroke="none"/>
+  </g>;
+}
+
+function MajorScene({ name }) {
+  return <g>
+    <MajorSymbol name={name}/>
+    <MajorFigure name={name}/>
+  </g>;
 }
 
 export default function TarotArtwork({ card, compact = false }) {
