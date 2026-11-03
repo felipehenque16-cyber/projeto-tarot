@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { minorCards } from './minorArcana.js';
+import TarotArtwork from './TarotArtwork.jsx';
 import { ArrowDown, ArrowRight, RotateCcw, Sparkles, Sun, MoonStar, Leaf, Menu, X } from 'lucide-react';
 
 const cards = [
@@ -93,18 +94,18 @@ function App() {
           <div className="mode-options"><button className={mode==='single'?'mode-option selected':'mode-option'} onClick={()=>{setMode('single');setDrawn(null);setSpread([])}}>Uma carta<small>um olhar para o agora</small></button><button className={mode==='three'?'mode-option selected':'mode-option'} onClick={()=>{setMode('three');setDrawn(null);setSpread([])}}>Três cartas<small>passado · presente · possibilidades</small></button></div>
         </div>
         <div className="draw-area">
-          <div className={drawn?'flip-card is-flipped':'flip-card'}><div className="flip-card-inner"><div className="flip-face flip-back"><div className="deck-pattern"><span>✳</span><i>✧</i><b>☾</b><small>LUME</small></div></div><div className="flip-face flip-front"><div className="front-frame"><small>{drawn?.number}</small><span>{drawn?.symbol}</span><b>{drawn?.name}</b><i>{drawn?.keyword}</i></div></div></div></div>
+          <div className={drawn?'flip-card is-flipped':'flip-card'}><div className="flip-card-inner"><div className="flip-face flip-back"><div className="deck-pattern"><span>✳</span><i>✧</i><b>☾</b><small>LUME</small></div></div><div className="flip-face flip-front"><div className="front-frame">{drawn && <TarotArtwork card={drawn} />}</div></div></div></div>
           <div className="draw-instruction"><span className="tiny-star">✳</span><h3>{drawn||spread.length?'Sua tiragem está aqui.':'Quando sentir que é a hora...'}</h3><p>{drawn||spread.length?'Leia sem pressa. Fique com o que conversar com você.':'Não existe escolha certa. Apenas um convite para olhar para dentro.'}</p><button className="primary-button" onClick={drawCard}>{drawn||spread.length?'Fazer nova tiragem':mode==='three'?'Revelar as três cartas':'Revelar minha carta'} <ArrowRight size={17}/></button>{(drawn||spread.length>0)&&<button className="reset-button" onClick={()=>{setDrawn(null);setSpread([])}}><RotateCcw size={14}/> Recomeçar</button>}</div>
         </div>
         {spread.length===3&&<div className="result spread-result" id="reading">
           <div className="result-top"><span>SUA TIRAGEM • TRÊS CARTAS</span><span className="result-tag">FOCO: {focus.toUpperCase()}</span></div>
-          <div className="spread-grid">{spread.map((card,i)=><article className="spread-card" key={card.name} style={{animationDelay:(i*180)+'ms'}}><div className="spread-position">{['01 — PASSADO','02 — PRESENTE','03 — POSSIBILIDADES'][i]}</div><div className="mini-card"><span>{card.symbol}</span><b>{card.name}</b><small>{card.number}</small></div><h3>{card.name}</h3><span className="spread-keyword">{card.keyword}</span><p>{card.meaning}</p><blockquote>“{card.reflection}”</blockquote><div className="spread-advice"><b>Um convite</b><p>{card.advice}</p></div></article>)}</div>
+          <div className="spread-grid">{spread.map((card,i)=><article className="spread-card" key={card.name} style={{animationDelay:(i*180)+'ms'}}><div className="spread-position">{['01 — PASSADO','02 — PRESENTE','03 — POSSIBILIDADES'][i]}</div><div className="mini-card"><TarotArtwork card={card} compact /></div><h3>{card.name}</h3><span className="spread-keyword">{card.keyword}</span><p>{card.meaning}</p><blockquote>“{card.reflection}”</blockquote><div className="spread-advice"><b>Um convite</b><p>{card.advice}</p></div></article>)}</div>
           <div className="spread-synthesis"><span>OLHANDO PARA O CONJUNTO</span><p>Que relação você percebe entre <strong>{spread[0].keyword.toLowerCase()}</strong>, <strong>{spread[1].keyword.toLowerCase()}</strong> e <strong>{spread[2].keyword.toLowerCase()}</strong>? A conexão que você faz entre essas imagens também faz parte da leitura.</p></div>
           <p className="result-disclaimer">Uma leitura simbólica para refletir sobre {focus==='amor'?'amor e relações':focus==='trabalho'?'trabalho e caminhos':focus==='decisoes'?'escolhas e mudanças':'autoconhecimento'}. As cartas não determinam o futuro.</p>
         </div>}
         {drawn&&<div className="result" id="reading">
           <div className="result-top"><span>SUA CARTA • {drawn.number} · FOCO: {focus.toUpperCase()}</span><span className="result-tag">{drawn.arcana === 'menores' ? 'ARCANOS MENORES' : 'ARCANOS MAIORES'}</span></div>
-          <div className="result-content"><div className="result-symbol"><span>{drawn.symbol}</span><small>{drawn.number}</small></div><div className="result-copy"><div className="section-kicker">UMA MENSAGEM PARA REFLETIR</div><h2>{drawn.name}</h2><h4>{drawn.keyword}</h4><p>{drawn.meaning}</p><blockquote>“{drawn.reflection}”</blockquote><div className="advice"><Leaf size={17}/><div><b>Um convite para hoje</b><p>{drawn.advice}</p></div></div></div></div>
+          <div className="result-content"><div className="result-symbol"><TarotArtwork card={drawn} /></div><div className="result-copy"><div className="section-kicker">UMA MENSAGEM PARA REFLETIR</div><h2>{drawn.name}</h2><h4>{drawn.keyword}</h4><p>{drawn.meaning}</p><blockquote>“{drawn.reflection}”</blockquote><div className="advice"><Leaf size={17}/><div><b>Um convite para hoje</b><p>{drawn.advice}</p></div></div></div></div>
           <p className="result-disclaimer">Esta leitura é um exercício simbólico de autoconhecimento. Use sua própria percepção para construir seus caminhos.</p>
         </div>}
       </section>
