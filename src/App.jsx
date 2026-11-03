@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { minorCards } from './minorArcana.js';
 import { ArrowDown, ArrowRight, RotateCcw, Sparkles, Sun, MoonStar, Leaf, Menu, X } from 'lucide-react';
 
 const cards = [
@@ -26,12 +27,14 @@ const cards = [
   {name:'O Mundo',number:'XXI',symbol:'✺',keyword:'Integração e conclusão',theme:'realização',meaning:'O Mundo representa fechamento de ciclo e integração. É um convite para reconhecer o caminho percorrido, perceber o quanto mudou e se preparar para novos começos com mais repertório.',reflection:'O que você conquistou e ainda não reconheceu?',advice:'Honre seu percurso. Concluir uma etapa também é parte de seguir crescendo.'}
 ];
 
+const fullDeck = [...cards, ...minorCards];
+
 function App() {
   const [drawn, setDrawn] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const drawCard = () => {
-    let next = cards[Math.floor(Math.random() * cards.length)];
-    if (drawn && cards.length > 1) while (next.name === drawn.name) next = cards[Math.floor(Math.random() * cards.length)];
+    let next = fullDeck[Math.floor(Math.random() * fullDeck.length)];
+    if (drawn && fullDeck.length > 1) while (next.name === drawn.name) next = fullDeck[Math.floor(Math.random() * fullDeck.length)];
     setDrawn(next);
     window.setTimeout(() => document.getElementById('reading')?.scrollIntoView({behavior:'smooth',block:'start'}), 80);
   };
@@ -39,7 +42,7 @@ function App() {
   return <div className="site-shell">
     <div className="announcement"><span className="announcement-dot"/> UM ESPAÇO PARA SE ESCUTAR <span className="announcement-star">✳</span> SEM PRESSA, SEM RESPOSTAS PRONTAS</div>
     <header className="nav-wrap">
-      <a className="brand" href="#inicio" aria-label="Lume, início"><span className="brand-mark">e.</span><span>lume<small>tarot & autoconhecimento</small></span></a>
+      <a className="brand" href="#inicio" aria-label="Lume, início"><span className="brand-mark">l.</span><span>lume<small>tarot & autoconhecimento</small></span></a>
       <button className="menu-toggle" onClick={()=>setMenuOpen(!menuOpen)} aria-label="Abrir menu">{menuOpen?<X/>:<Menu/>}</button>
       <nav className={menuOpen?'nav-links open':'nav-links'}>
         <a href="#sobre" onClick={()=>setMenuOpen(false)}>O espaço</a><a href="#como-funciona" onClick={()=>setMenuOpen(false)}>Como funciona</a><a href="#tiragem" onClick={()=>setMenuOpen(false)}>Sua carta</a>
@@ -87,7 +90,7 @@ function App() {
           <div className="draw-instruction"><span className="tiny-star">✳</span><h3>{drawn?'Sua carta está aqui.':'Quando sentir que é a hora...'}</h3><p>{drawn?'Leia sem pressa. Fique apenas com o que conversar com você.':'Não existe escolha certa. Apenas um convite para olhar para dentro.'}</p><button className="primary-button" onClick={drawCard}>{drawn?'Tirar outra carta':'Revelar minha carta'} <ArrowRight size={17}/></button>{drawn&&<button className="reset-button" onClick={()=>setDrawn(null)}><RotateCcw size={14}/> Recomeçar</button>}</div>
         </div>
         {drawn&&<div className="result" id="reading">
-          <div className="result-top"><span>SUA CARTA • {drawn.number}</span><span className="result-tag">ARCANOS MAIORES</span></div>
+          <div className="result-top"><span>SUA CARTA • {drawn.number}</span><span className="result-tag">{drawn.arcana === 'menores' ? 'ARCANOS MENORES' : 'ARCANOS MAIORES'}</span></div>
           <div className="result-content"><div className="result-symbol"><span>{drawn.symbol}</span><small>{drawn.number}</small></div><div className="result-copy"><div className="section-kicker">UMA MENSAGEM PARA REFLETIR</div><h2>{drawn.name}</h2><h4>{drawn.keyword}</h4><p>{drawn.meaning}</p><blockquote>“{drawn.reflection}”</blockquote><div className="advice"><Leaf size={17}/><div><b>Um convite para hoje</b><p>{drawn.advice}</p></div></div></div></div>
           <p className="result-disclaimer">Esta leitura é um exercício simbólico de autoconhecimento. Use sua própria percepção para construir seus caminhos.</p>
         </div>}
@@ -95,7 +98,7 @@ function App() {
 
       <section className="closing"><div className="closing-flower">✳</div><p>um lembrete gentil</p><h2>Você não precisa ter todas as respostas <em>agora.</em></h2><span>Às vezes, uma boa pergunta já muda bastante coisa.</span><a href="#tiragem" className="text-link">Voltar para minha carta <ArrowRight size={15}/></a></section>
     </main>
-    <footer><a className="brand footer-brand" href="#inicio"><span className="brand-mark">e.</span><span>lume<small>tarot & autoconhecimento</small></span></a><span>Feito com intenção, curiosidade e cuidado.</span><span>© 2026 ENTRELINHAS</span></footer>
+    <footer><a className="brand footer-brand" href="#inicio"><span className="brand-mark">e.</span><span>lume<small>tarot & autoconhecimento</small></span></a><span>Feito com intenção, curiosidade e cuidado.</span><span>© 2026 LUME</span></footer>
   </div>;
 }
 
