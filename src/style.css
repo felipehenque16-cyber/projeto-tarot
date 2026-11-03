@@ -33,3 +33,24 @@
 
 /* Espaço de constelação simbólica */
 .constellation-section{background:#203b31;color:#f2f0e5;padding:105px max(8%,calc((100% - 1050px)/2)) 95px}.constellation-heading{max-width:680px}.constellation-heading h2{font:500 clamp(36px,4.2vw,52px)/1.18 'Playfair Display',serif;letter-spacing:-.8px;margin:25px 0 15px}.constellation-heading h2 em{color:#c6b18f}.constellation-heading>p{font-size:12px;line-height:1.9;color:#c4cabe;max-width:560px}.constellation-panel{margin-top:42px;background:#f0eee3;color:var(--ink);padding:35px 40px 38px}.constellation-label{font-size:8px;letter-spacing:1.7px;color:#858b7c;text-align:center;margin-bottom:14px}.constellation-options{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}.constellation-option{border:1px solid #d5d7c9;background:transparent;color:#697467;padding:10px 15px;font-size:10px;cursor:pointer}.constellation-option.selected{background:#294b3d;border-color:#294b3d;color:#fff}.constellation-orbit{height:205px;max-width:560px;margin:22px auto 5px;position:relative;display:flex;align-items:center;justify-content:space-between;padding:0 6%}.orbit-line{position:absolute;left:17%;right:17%;top:50%;height:1px;background:#c6c9b9}.constellation-node{position:relative;z-index:1;width:112px;height:112px;border-radius:50%;background:#e5e5d8;border:1px solid #c8cbb9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#6e8068}.constellation-node span{font:32px 'Playfair Display',serif;color:#b17e5d}.constellation-node small{font-size:7px;letter-spacing:1px}.node-self{width:132px;height:132px;background:#294b3d;border:5px double #c9b58f;color:#f2f0e5}.node-self span{color:#d9c49d}.constellation-question{text-align:center;max-width:560px;margin:0 auto}.constellation-question>span{font-size:8px;letter-spacing:1.7px;color:#b17e5d}.constellation-question h3{font:500 25px/1.35 'Playfair Display',serif;margin:10px 0 20px}.constellation-reflection{max-width:650px;margin:32px auto 0;padding:25px 28px;background:#e5e6d9;border-left:2px solid #b17e5d;animation:appear .4s ease both}.constellation-reflection h3{font:500 23px/1.4 'Playfair Display',serif;margin:13px 0}.constellation-reflection>p{font-size:11px;line-height:1.85;color:#687367}.constellation-reflection .reset-button{margin-left:0}.constellation-footnote{font-size:9px;line-height:1.7;color:#aeb9ab;text-align:center;margin:18px 0 0}@media(max-width:760px){.constellation-section{padding:78px 24px}.constellation-panel{padding:25px 17px}.constellation-options{display:grid;grid-template-columns:1fr 1fr}.constellation-option{padding:12px 5px}.constellation-orbit{height:165px;padding:0}.constellation-node{width:88px;height:88px}.constellation-node small{font-size:6px}.node-self{width:105px;height:105px}.constellation-question h3{font-size:22px}.constellation-reflection{padding:20px 17px}}
+
+ 
+/* Diário guiado da constelação simbólica */
+.constellation-journal{max-width:650px;margin:30px auto 0;padding:28px;background:#e5e6d9;border-left:2px solid #b17e5d;animation:appear .4s ease both}
+.constellation-progress{display:flex;justify-content:space-between;gap:12px;font-size:8px;letter-spacing:1.4px;color:#8a907f}
+.constellation-progress-track{height:3px;background:#d0d3c4;margin:12px 0 24px;overflow:hidden}
+.constellation-progress-track span{display:block;height:100%;background:#b17e5d;transition:width .3s ease}
+.constellation-journal h3{font:500 24px/1.4 'Playfair Display',serif;margin:0 0 9px;color:#294b3d}
+.constellation-journal>p{font-size:11px;line-height:1.8;color:#687367}
+.constellation-journal textarea{display:block;width:100%;min-height:125px;resize:vertical;border:1px solid #d0d3c4;background:#f5f3eb;padding:14px;color:#34483b;font:12px/1.7 'DM Sans',sans-serif;outline:none}
+.constellation-journal textarea:focus{border-color:#82947b;box-shadow:0 0 0 2px #82947b20}
+.constellation-journal-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:17px}
+.constellation-journal-actions .reset-button{margin:0}
+.constellation-journal-actions .primary-button:disabled{opacity:.45;cursor:not-allowed}
+.constellation-finish{margin-top:25px;padding-top:22px;border-top:1px solid #cdd0c1}
+.constellation-finish>span{color:#b17e5d;font-size:22px}
+.constellation-finish h4{font:500 22px 'Playfair Display',serif;margin:8px 0}
+.constellation-finish>p{font-size:11px;line-height:1.8;color:#687367}
+.constellation-finish>small{display:block;font-size:9px;line-height:1.7;color:#858b7c}
+.constellation-finish .reset-button{margin-left:0}
+@media(max-width:760px){.constellation-journal{padding:21px 16px}.constellation-journal h3{font-size:21px}.constellation-journal-actions{align-items:stretch}.constellation-journal-actions .primary-button{padding:13px 14px;gap:8px}}
