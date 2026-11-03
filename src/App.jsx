@@ -43,6 +43,14 @@ function App() {
   const [mode, setMode] = useState('single');
   const [focus, setFocus] = useState('autoconhecimento');
   const [menuOpen, setMenuOpen] = useState(false);
+  const [constellationTheme, setConstellationTheme] = useState('pertencimento');
+  const [constellationStep, setConstellationStep] = useState(false);
+  const constellationThemes = {
+    pertencimento: {label:'Pertencimento', question:'Em quais espaços você sente que pode ser quem é?', prompt:'Que partes da sua história merecem ser reconhecidas sem julgamento?', note:'Pertencer não precisa significar caber em todos os lugares. Também pode ser encontrar relações onde exista espaço para ser você.'},
+    familia: {label:'História familiar', question:'Que lembranças da sua história familiar estão presentes no seu momento atual?', prompt:'Quais valores você deseja levar adiante — e quais gostaria de ressignificar?', note:'Olhar para a própria história não significa encontrar culpados. É uma oportunidade de reconhecer experiências e escolher o que faz sentido construir daqui em diante.'},
+    relacoes: {label:'Relações', question:'O que você tem percebido sobre a forma como se relaciona?', prompt:'Que necessidade, limite ou conversa merece mais atenção?', note:'Relações são construídas por pessoas diferentes. Observe o que está ao seu alcance comunicar, cuidar e transformar.'},
+    ciclos: {label:'Ciclos e mudanças', question:'Que ciclo da sua vida parece estar pedindo atenção?', prompt:'O que você gostaria de encerrar, preservar ou começar de outro jeito?', note:'Mudanças podem trazer sentimentos misturados. Você não precisa resolver tudo de uma vez: reconhecer o momento já pode ser um começo.'}
+  };
   const drawCard = () => {
     if (mode !== 'single') { const deck = [...fullDeck].sort(() => Math.random() - 0.5); setSpread(deck.slice(0, mode === 'five' ? 5 : 3)); setDrawn(null); }
     else { let next = fullDeck[Math.floor(Math.random() * fullDeck.length)]; if (drawn) while (next.name === drawn.name) next = fullDeck[Math.floor(Math.random() * fullDeck.length)]; setDrawn(next); setSpread([]); }
@@ -55,7 +63,7 @@ function App() {
       <a className="brand" href="#inicio" aria-label="Lume, início"><span className="brand-mark">l.</span><span>lume<small>tarot & autoconhecimento</small></span></a>
       <button className="menu-toggle" onClick={()=>setMenuOpen(!menuOpen)} aria-label="Abrir menu">{menuOpen?<X/>:<Menu/>}</button>
       <nav className={menuOpen?'nav-links open':'nav-links'}>
-        <a href="#sobre" onClick={()=>setMenuOpen(false)}>O espaço</a><a href="#como-funciona" onClick={()=>setMenuOpen(false)}>Como funciona</a><a href="#tiragem" onClick={()=>setMenuOpen(false)}>Sua carta</a>
+        <a href="#sobre" onClick={()=>setMenuOpen(false)}>O espaço</a><a href="#constelacao" onClick={()=>setMenuOpen(false)}>Constelação</a><a href="#tiragem" onClick={()=>setMenuOpen(false)}>Sua carta</a>
         <a className="nav-cta" href="#tiragem" onClick={()=>setMenuOpen(false)}>Fazer uma tiragem <ArrowRight size={15}/></a>
       </nav>
     </header>
@@ -93,6 +101,29 @@ function App() {
         </div>
       </section>
 
+      <section className="constellation-section" id="constelacao">
+        <div className="constellation-heading">
+          <div className="section-kicker light">UM OLHAR PARA AS SUAS RAÍZES <span>✳</span></div>
+          <h2>Há histórias que merecem ser <em>olhadas com carinho.</em></h2>
+          <p>Um exercício simbólico de reflexão sobre vínculos, pertencimento e caminhos pessoais. Sem diagnósticos, respostas prontas ou julgamentos.</p>
+        </div>
+        <div className="constellation-panel">
+          <div className="constellation-label">ESCOLHA UM TEMA PARA EXPLORAR</div>
+          <div className="constellation-options">
+            {Object.entries(constellationThemes).map(([key,item])=><button key={key} className={constellationTheme===key?'constellation-option selected':'constellation-option'} onClick={()=>{setConstellationTheme(key);setConstellationStep(false)}}>{item.label}</button>)}
+          </div>
+          <div className="constellation-orbit" aria-label="Representação simbólica de três dimensões da reflexão">
+            <div className="orbit-line"/>
+            <div className="constellation-node node-past"><span>✧</span><small>MINHA HISTÓRIA</small></div>
+            <div className="constellation-node node-self"><span>✳</span><small>EU, AGORA</small></div>
+            <div className="constellation-node node-future"><span>☼</span><small>MEUS CAMINHOS</small></div>
+          </div>
+          <div className="constellation-question"><span>UM PONTO DE PARTIDA</span><h3>{constellationThemes[constellationTheme].question}</h3><button className="primary-button" onClick={()=>setConstellationStep(!constellationStep)}>{constellationStep?'Recolher reflexão':'Começar a refletir'} <ArrowRight size={16}/></button></div>
+          {constellationStep&&<div className="constellation-reflection"><div className="section-kicker">UM CONVITE, SEM PRESSA</div><h3>{constellationThemes[constellationTheme].prompt}</h3><p>{constellationThemes[constellationTheme].note}</p><button className="reset-button" onClick={()=>setConstellationStep(false)}><RotateCcw size={14}/> Encerrar reflexão</button></div>}
+        </div>
+        <p className="constellation-footnote">Este espaço é educativo e contemplativo; não substitui acompanhamento psicológico, terapêutico ou profissional.</p>
+      </section>
+
       <section className="reading-section" id="tiragem">
         <div className="reading-heading"><div className="section-kicker"><span/> SEU MOMENTO, SUA PERGUNTA</div><h2>O que merece sua <em>atenção hoje?</em></h2><p>Feche os olhos por alguns segundos. Pense em algo que gostaria de compreender melhor.</p></div>
         <div className="reading-choices">
@@ -120,7 +151,7 @@ function App() {
 
       <section className="closing"><div className="closing-flower">✳</div><p>um lembrete gentil</p><h2>Você não precisa ter todas as respostas <em>agora.</em></h2><span>Às vezes, uma boa pergunta já muda bastante coisa.</span><a href="#tiragem" className="text-link">Voltar para minha carta <ArrowRight size={15}/></a></section>
     </main>
-    <footer><a className="brand footer-brand" href="#inicio"><span className="brand-mark">e.</span><span>lume<small>tarot & autoconhecimento</small></span></a><span>Feito com intenção, curiosidade e cuidado.</span><span>© 2026 LUME</span></footer>
+    <footer><a className="brand footer-brand" href="#inicio"><span className="brand-mark">l.</span><span>lume<small>tarot & autoconhecimento</small></span></a><span>Feito com intenção, curiosidade e cuidado.</span><span>© 2026 LUME</span></footer>
   </div>;
 }
 
