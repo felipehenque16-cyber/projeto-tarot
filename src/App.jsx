@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { minorCards } from './minorArcana.js';
 import TarotArtwork from './TarotArtwork.jsx';
 import { ArrowDown, ArrowRight, RotateCcw, Sparkles, Sun, MoonStar, Leaf, Menu, X } from 'lucide-react';
@@ -45,12 +45,27 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [constellationTheme, setConstellationTheme] = useState('pertencimento');
   const [constellationStep, setConstellationStep] = useState(false);
+  const [constellationStage, setConstellationStage] = useState(0);
+  const [constellationNotes, setConstellationNotes] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('lume-constellation-notes') || '{}'); }
+    catch { return {}; }
+  });
+  useEffect(() => {
+    localStorage.setItem('lume-constellation-notes', JSON.stringify(constellationNotes));
+  }, [constellationNotes]);
   const constellationThemes = {
     pertencimento: {label:'Pertencimento', question:'Em quais espaços você sente que pode ser quem é?', prompt:'Que partes da sua história merecem ser reconhecidas sem julgamento?', note:'Pertencer não precisa significar caber em todos os lugares. Também pode ser encontrar relações onde exista espaço para ser você.'},
     familia: {label:'História familiar', question:'Que lembranças da sua história familiar estão presentes no seu momento atual?', prompt:'Quais valores você deseja levar adiante — e quais gostaria de ressignificar?', note:'Olhar para a própria história não significa encontrar culpados. É uma oportunidade de reconhecer experiências e escolher o que faz sentido construir daqui em diante.'},
     relacoes: {label:'Relações', question:'O que você tem percebido sobre a forma como se relaciona?', prompt:'Que necessidade, limite ou conversa merece mais atenção?', note:'Relações são construídas por pessoas diferentes. Observe o que está ao seu alcance comunicar, cuidar e transformar.'},
     ciclos: {label:'Ciclos e mudanças', question:'Que ciclo da sua vida parece estar pedindo atenção?', prompt:'O que você gostaria de encerrar, preservar ou começar de outro jeito?', note:'Mudanças podem trazer sentimentos misturados. Você não precisa resolver tudo de uma vez: reconhecer o momento já pode ser um começo.'}
   };
+  const constellationStages = [
+    {label:'MINHA HISTÓRIA', title:'O que da sua história merece ser acolhido?', hint:'Escreva uma lembrança, um valor ou algo que você reconhece como parte da sua trajetória.'},
+    {label:'EU, AGORA', title:'Como essa história aparece no seu presente?', hint:'Observe sentimentos, necessidades e escolhas atuais, sem se cobrar por encontrar uma resposta definitiva.'},
+    {label:'MEUS CAMINHOS', title:'O que você deseja levar adiante a partir daqui?', hint:'Registre um cuidado, limite ou pequeno passo que faça sentido para você.'}
+  ];
+  const noteKey = (stage) => `${constellationTheme}-${stage}`;
+  const updateConstellationNote = (value) => setConstellationNotes(current => ({...current, [noteKey(constellationStage)]:value}));
   const drawCard = () => {
     if (mode !== 'single') { const deck = [...fullDeck].sort(() => Math.random() - 0.5); setSpread(deck.slice(0, mode === 'five' ? 5 : 3)); setDrawn(null); }
     else { let next = fullDeck[Math.floor(Math.random() * fullDeck.length)]; if (drawn) while (next.name === drawn.name) next = fullDeck[Math.floor(Math.random() * fullDeck.length)]; setDrawn(next); setSpread([]); }
@@ -110,7 +125,7 @@ function App() {
         <div className="constellation-panel">
           <div className="constellation-label">ESCOLHA UM TEMA PARA EXPLORAR</div>
           <div className="constellation-options">
-            {Object.entries(constellationThemes).map(([key,item])=><button key={key} className={constellationTheme===key?'constellation-option selected':'constellation-option'} onClick={()=>{setConstellationTheme(key);setConstellationStep(false)}}>{item.label}</button>)}
+            {Object.entries(constellationThemes).map(([key,item])=><button key={key} className={constellationTheme===key?'constellation-option selected':'constellation-option'} onClick={()=>{setConstellationTheme(key);setConstellationStep(false);setConstellationStage(0)}}>{item.label}</button>)}
           </div>
           <div className="constellation-orbit" aria-label="Representação simbólica de três dimensões da reflexão">
             <div className="orbit-line"/>
@@ -118,8 +133,19 @@ function App() {
             <div className="constellation-node node-self"><span>✳</span><small>EU, AGORA</small></div>
             <div className="constellation-node node-future"><span>☼</span><small>MEUS CAMINHOS</small></div>
           </div>
-          <div className="constellation-question"><span>UM PONTO DE PARTIDA</span><h3>{constellationThemes[constellationTheme].question}</h3><button className="primary-button" onClick={()=>setConstellationStep(!constellationStep)}>{constellationStep?'Recolher reflexão':'Começar a refletir'} <ArrowRight size={16}/></button></div>
-          {constellationStep&&<div className="constellation-reflection"><div className="section-kicker">UM CONVITE, SEM PRESSA</div><h3>{constellationThemes[constellationTheme].prompt}</h3><p>{constellationThemes[constellationTheme].note}</p><button className="reset-button" onClick={()=>setConstellationStep(false)}><RotateCcw size={14}/> Encerrar reflexão</button></div>}
+          <div className="constellation-question"><span>UM PONTO DE PARTIDA</span><h3>{constellationThemes[constellationTheme].question}</h3><button className="primary-button" onClick={()=>{setConstellationStep(!constellationStep);setConstellationStage(0)}}>{constellationStep?'Recolher reflexão':'Começar a refletir'} <ArrowRight size={16}/></button></div>
+          {constellationStep&&<div className="constellation-journal">
+            <div className="constellation-progress"><span>ETAPA {constellationStage+1} DE 3</span><span>{constellationStages[constellationStage].label}</span></div>
+            <div className="constellation-progress-track"><span style={{width:`${((constellationStage+1)/3)*100}%`}}/></div>
+            <h3>{constellationStages[constellationStage].title}</h3>
+            <p>{constellationStages[constellationStage].hint}</p>
+            <textarea aria-label="Suas anotações desta etapa" value={constellationNotes[noteKey(constellationStage)]||''} onChange={event=>updateConstellationNote(event.target.value)} placeholder="Escreva aqui, no seu tempo..."/>
+            <div className="constellation-journal-actions">
+              <button className="reset-button" onClick={()=>constellationStage===0?setConstellationStep(false):setConstellationStage(stage=>stage-1)}>{constellationStage===0?'Encerrar':'Etapa anterior'}</button>
+              <button className="primary-button" onClick={()=>setConstellationStage(stage=>Math.min(2,stage+1))} disabled={constellationStage===2}>Próxima etapa <ArrowRight size={15}/></button>
+            </div>
+            {constellationStage===2&&<div className="constellation-finish"><span>✳</span><h4>Um passo de cada vez.</h4><p>{constellationThemes[constellationTheme].note}</p><small>Suas anotações ficam salvas neste navegador e podem ser revisitadas enquanto os dados locais forem mantidos.</small><button className="reset-button" onClick={()=>{setConstellationStep(false);setConstellationStage(0)}}><RotateCcw size={14}/> Finalizar reflexão</button></div>}
+          </div>}
         </div>
         <p className="constellation-footnote">Este espaço é educativo e contemplativo; não substitui acompanhamento psicológico, terapêutico ou profissional.</p>
       </section>
