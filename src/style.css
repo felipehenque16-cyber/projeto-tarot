@@ -13,3 +13,9 @@
 .result-symbol{background:transparent;border:0;outline:0;display:flex;padding:0;overflow:visible}
 .result-symbol .tarot-art{width:100%;height:100%;max-width:170px}
 @media(max-width:760px){.result-symbol{width:145px;height:190px}.mini-card{height:160px;max-width:112px}}
+
+/* Contexto da leitura de acordo com o foco escolhido */
+.focus-lens{margin:0 0 22px;padding:13px 16px;background:#e3e5d8;border-left:2px solid #b17e5d}
+.focus-lens b{display:block;font-size:8px;letter-spacing:1.5px;color:#a16f50;margin-bottom:6px}
+.focus-lens p{font-size:11px;line-height:1.75;color:#596d59;margin:0}
+.spread-result>.focus-lens{margin:20px 0 0}
