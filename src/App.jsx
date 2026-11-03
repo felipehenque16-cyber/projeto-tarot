@@ -30,6 +30,13 @@ const cards = [
 
 const fullDeck = [...cards, ...minorCards];
 
+const focusMessages = {
+  autoconhecimento: 'Observe o que esta carta desperta em você. Que necessidade, limite ou desejo pessoal merece ser escutado com mais atenção?',
+  amor: 'Nas relações, esta carta pode abrir uma reflexão sobre diálogo, reciprocidade e cuidado. O que você precisa expressar ou compreender melhor?',
+  trabalho: 'No trabalho e nos projetos, pense em como esta mensagem conversa com suas habilidades, prioridades e próximos passos possíveis.',
+  decisoes: 'Diante de escolhas e mudanças, use esta imagem para considerar alternativas, reconhecer o que está sob seu controle e decidir com mais consciência.'
+};
+
 function App() {
   const [drawn, setDrawn] = useState(null);
   const [spread, setSpread] = useState([]);
@@ -99,13 +106,14 @@ function App() {
         </div>
         {spread.length===3&&<div className="result spread-result" id="reading">
           <div className="result-top"><span>SUA TIRAGEM • TRÊS CARTAS</span><span className="result-tag">FOCO: {focus.toUpperCase()}</span></div>
+          <div className="focus-lens"><b>OLHAR PELO SEU FOCO</b><p>{focusMessages[focus]}</p></div>
           <div className="spread-grid">{spread.map((card,i)=><article className="spread-card" key={card.name} style={{animationDelay:(i*180)+'ms'}}><div className="spread-position">{['01 — PASSADO','02 — PRESENTE','03 — POSSIBILIDADES'][i]}</div><div className="mini-card"><TarotArtwork card={card} compact /></div><h3>{card.name}</h3><span className="spread-keyword">{card.keyword}</span><p>{card.meaning}</p><blockquote>“{card.reflection}”</blockquote><div className="spread-advice"><b>Um convite</b><p>{card.advice}</p></div></article>)}</div>
           <div className="spread-synthesis"><span>OLHANDO PARA O CONJUNTO</span><p>Que relação você percebe entre <strong>{spread[0].keyword.toLowerCase()}</strong>, <strong>{spread[1].keyword.toLowerCase()}</strong> e <strong>{spread[2].keyword.toLowerCase()}</strong>? A conexão que você faz entre essas imagens também faz parte da leitura.</p></div>
           <p className="result-disclaimer">Uma leitura simbólica para refletir sobre {focus==='amor'?'amor e relações':focus==='trabalho'?'trabalho e caminhos':focus==='decisoes'?'escolhas e mudanças':'autoconhecimento'}. As cartas não determinam o futuro.</p>
         </div>}
         {drawn&&<div className="result" id="reading">
           <div className="result-top"><span>SUA CARTA • {drawn.number} · FOCO: {focus.toUpperCase()}</span><span className="result-tag">{drawn.arcana === 'menores' ? 'ARCANOS MENORES' : 'ARCANOS MAIORES'}</span></div>
-          <div className="result-content"><div className="result-symbol"><TarotArtwork card={drawn} /></div><div className="result-copy"><div className="section-kicker">UMA MENSAGEM PARA REFLETIR</div><h2>{drawn.name}</h2><h4>{drawn.keyword}</h4><p>{drawn.meaning}</p><blockquote>“{drawn.reflection}”</blockquote><div className="advice"><Leaf size={17}/><div><b>Um convite para hoje</b><p>{drawn.advice}</p></div></div></div></div>
+          <div className="result-content"><div className="result-symbol"><TarotArtwork card={drawn} /></div><div className="result-copy"><div className="section-kicker">UMA MENSAGEM PARA REFLETIR</div><h2>{drawn.name}</h2><h4>{drawn.keyword}</h4><div className="focus-lens"><b>OLHAR PELO SEU FOCO</b><p>{focusMessages[focus]}</p></div><p>{drawn.meaning}</p><blockquote>“{drawn.reflection}”</blockquote><div className="advice"><Leaf size={17}/><div><b>Um convite para hoje</b><p>{drawn.advice}</p></div></div></div></div>
           <p className="result-disclaimer">Esta leitura é um exercício simbólico de autoconhecimento. Use sua própria percepção para construir seus caminhos.</p>
         </div>}
       </section>
