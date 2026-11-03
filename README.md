@@ -1,4 +1,4 @@
-# Entrelinhas — Tarot & autoconhecimento
+# Lume — Tarot & autoconhecimento
 
 Uma experiência web de tarot pensada como um espaço de pausa e reflexão. O projeto usa a linguagem simbólica dos Arcanos Maiores para propor perguntas e leituras de autoconhecimento — sem tratar as cartas como previsões ou verdades absolutas.
 
