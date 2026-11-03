@@ -61,6 +61,38 @@ function MajorSymbol({ name }) {
 }
 
 
+
+function MinorScene({ card }) {
+  const name = card?.name || '';
+  const suit = name.includes('Paus') ? 'Paus' : name.includes('Copas') ? 'Copas' : name.includes('Espadas') ? 'Espadas' : 'Ouros';
+  const colors = { Paus:['#a45f43','#6f815d'], Copas:['#668a91','#b58b75'], Espadas:['#65768b','#9b9b91'], Ouros:['#b18a4e','#788b69'] };
+  const [accent, secondary] = colors[suit];
+  const court = /Pajem|Cavaleiro|Rainha|Rei/.test(name);
+  const count = name.startsWith('Ás') ? 1 : Math.min(10, Number((name.match(/^(Dois|Três|Quatro|Cinco|Seis|Sete|Oito|Nove|Dez)/)?.[1] && ({Dois:2,Três:3,Quatro:4,Cinco:5,Seis:6,Sete:7,Oito:8,Nove:9,Dez:10})[name.match(/^(Dois|Três|Quatro|Cinco|Seis|Sete|Oito|Nove|Dez)/)[1]) || 3));
+  const glyph = suit === 'Paus' ? '♧' : suit === 'Copas' ? '♡' : suit === 'Espadas' ? '⚔' : '◇';
+  return <g>
+    <path d="M18 147Q45 117 70 143T120 138T162 144V207H18Z" fill={secondary}/>
+    <path d="M18 170Q53 151 84 169T162 164V207H18Z" fill="#435e4c" opacity=".65"/>
+    {Array.from({length:count},(_,i)=>{
+      const x = count===1 ? 90 : 42+(i%3)*48;
+      const y = count===1 ? 104 : 65+Math.floor(i/3)*34;
+      return <g key={i} transform={`translate(${x} ${y}) rotate(${(i%2?12:-12)})`}>
+        <path d="M0 -19Q-8 -5 0 7Q8 -5 0 -19Z" fill={accent} stroke="#514b3d" strokeWidth="1"/>
+        <path d="M0 -13V11" stroke="#f0dfb8" strokeWidth="1.4"/>
+        <text x="0" y="3" textAnchor="middle" fontSize="12" fill="#f4e8cc">{glyph}</text>
+      </g>;
+    })}
+    {court && <g stroke="#514b3d" strokeWidth="1.3" strokeLinejoin="round">
+      <path d="M72 117Q90 98 108 117L119 179H61Z" fill={accent}/>
+      <path d="M82 116L90 145L98 116L105 174H75Z" fill="#e0c99c"/>
+      <circle cx="90" cy="91" r="13" fill="#c58e69"/>
+      <path d="M77 90Q78 72 93 76Q105 76 103 92L98 84Q88 81 78 89Z" fill="#59483e"/>
+      <path d="M72 124L57 151M108 124L123 151" stroke={accent} strokeWidth="8"/>
+    </g>}
+    <path d="M27 190Q90 180 153 190" fill="none" stroke="#e4d3ae" strokeWidth="1.5"/>
+  </g>;
+}
+
 function MajorFigure({ name }) {
   const palette = {
     'O Louco':['#b86f55','#d6bd8b'],'O Mago':['#a84f43','#e1c58e'],
@@ -126,11 +158,10 @@ export default function TarotArtwork({ card, compact = false }) {
       <circle cx="90" cy="112" r="60" fill="none" stroke="#b17e5d" strokeWidth=".8" strokeDasharray="2 5"/>
       <MajorScene name={name}/>
       <text x="90" y="215" textAnchor="middle" fontSize="7" letterSpacing="1.6" fill="#8a674e">{name.toLocaleUpperCase('pt-BR')}</text>
-    </g> : <g fill="#345444" textAnchor="middle">
-      <circle cx="90" cy="112" r="58" fill="none" stroke="#b17e5d" strokeWidth=".8" strokeDasharray="2 5"/>
-      {pips.map((p) => { const cols = pipCount > 6 ? 2 : 1; const rows = Math.ceil(pipCount / cols); const x = cols === 1 ? 90 : (p % cols === 0 ? 64 : 116); const y = 112 - ((rows - 1) * 19) / 2 + Math.floor(p / cols) * 19; return <text key={p} x={x} y={y} fontSize={pipCount > 6 ? 19 : 29} fontFamily="Georgia,serif">{suit}</text>; })}
-      <path d="M40 184 Q90 205 140 184" stroke="#b17e5d" strokeWidth="1" fill="none"/>
-      <text x="90" y="215" fontSize="7" letterSpacing="1.6" fill="#8a674e">{suit} • {card?.number?.toUpperCase()}</text>
+    </g> : <g>
+      <MinorScene card={card}/>
+      <rect x="15" y="18" width="150" height="190" fill="none" stroke="#f3e6c7" strokeWidth="1.5"/>
+      <text x="90" y="215" textAnchor="middle" fontSize="7" letterSpacing="1.4" fill="#8a674e">{name.toLocaleUpperCase('pt-BR')}</text>
     </g>}
     <rect x="3" y="3" width="174" height="254" rx="3" fill="none" stroke="#334b3d" strokeWidth="2"/>
     <text x="19" y="27" textAnchor="start" fontSize="10" fontFamily="Georgia,serif" fill="#334b3d">{card?.number || '0'}</text>
