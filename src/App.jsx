@@ -47,27 +47,31 @@ function App() {
   const [constellationBirthDate, setConstellationBirthDate] = useState('');
   const [constellationRelations, setConstellationRelations] = useState(['pai', 'mae', 'conjuge']);
   const [constellationResult, setConstellationResult] = useState(false);
+  const [constellationAnswers, setConstellationAnswers] = useState({});
   const relationContent = {
     pai: {
       title: 'O vínculo com a figura paterna',
       theme: 'origem, referências e autonomia',
       reflection: 'A relação com a figura paterna pode tocar temas como reconhecimento, segurança, limites e a maneira como aprendemos a ocupar nosso espaço. Cada história é única: vale observar tanto o que foi oferecido quanto aquilo que você sentiu falta, sem reduzir toda a relação a uma única lembrança.',
       question: 'Que aprendizados dessa relação você deseja manter — e quais gostaria de construir de outro jeito?',
-      invitation: 'Reconheça o que essa história representa para você. Sua trajetória também pode incluir escolhas próprias, limites e novas referências.'
+      invitation: 'Reconheça o que essa história representa para você. Sua trajetória também pode incluir escolhas próprias, limites e novas referências.',
+      prompts: ['Que lembrança dessa relação ainda influencia a forma como você se enxerga?', 'Que valor ou aprendizado você deseja levar adiante, e que padrão prefere transformar?']
     },
     mae: {
       title: 'O vínculo com a figura materna',
       theme: 'cuidado, acolhimento e identidade',
       reflection: 'A relação com a figura materna pode despertar reflexões sobre cuidado, afeto, pertencimento e expectativas. Nem todas as experiências são iguais, e é possível reconhecer sentimentos diferentes ao mesmo tempo, sem precisar encontrar uma explicação definitiva para eles.',
       question: 'Quais formas de cuidado fizeram sentido para você e de que cuidado sente necessidade hoje?',
-      invitation: 'Permita-se reconhecer suas necessidades atuais. Cuidar de si também pode significar estabelecer limites e construir formas próprias de acolhimento.'
+      invitation: 'Permita-se reconhecer suas necessidades atuais. Cuidar de si também pode significar estabelecer limites e construir formas próprias de acolhimento.',
+      prompts: ['Em quais momentos você se sente acolhido(a) nessa relação?', 'Como você pode oferecer a si mesmo(a) o cuidado de que precisa hoje?']
     },
     conjuge: {
       title: 'O vínculo com seu cônjuge',
       theme: 'parceria, reciprocidade e escolhas',
       reflection: 'Uma relação conjugal é construída no encontro entre duas histórias, com expectativas, valores e maneiras diferentes de demonstrar afeto. Olhar para esse vínculo pode ajudar a perceber como vocês dialogam, dividem responsabilidades e preservam a individualidade dentro da parceria.',
       question: 'O que fortalece a parceria de vocês e que conversa merece mais espaço neste momento?',
-      invitation: 'Escolha um gesto possível de diálogo ou cuidado mútuo. Uma relação saudável também precisa de respeito, autonomia e espaço para cada pessoa ser quem é.'
+      invitation: 'Escolha um gesto possível de diálogo ou cuidado mútuo. Uma relação saudável também precisa de respeito, autonomia e espaço para cada pessoa ser quem é.',
+      prompts: ['O que faz você se sentir ouvido(a), respeitado(a) e acompanhado(a) nessa parceria?', 'Que conversa ou pequeno gesto poderia fortalecer a relação neste momento?']
     }
   };
   const toggleConstellationRelation = (relation) => {
@@ -177,6 +181,13 @@ function App() {
                 <h4>{relationContent[relation].title}</h4>
                 <p>{relationContent[relation].reflection}</p>
                 <blockquote>{relationContent[relation].question}</blockquote>
+                <div className="constellation-guided">
+                  <b>Perguntas para explorar</b>
+                  <ol>{relationContent[relation].prompts.map((prompt,i)=><li key={i}>{prompt}</li>)}</ol>
+                  <label htmlFor={`reflection-${relation}`}>Anotações sobre este vínculo</label>
+                  <textarea id={`reflection-${relation}`} value={constellationAnswers[relation] || ''} onChange={(event)=>setConstellationAnswers(current=>({...current,[relation]:event.target.value}))} placeholder="Escreva livremente. Você não precisa responder a tudo agora." rows={4}/>
+                  <small>Suas anotações ficam apenas nesta página enquanto ela estiver aberta.</small>
+                </div>
                 <div><b>Um convite para refletir</b><p>{relationContent[relation].invitation}</p></div>
               </article>)}
             </div>
