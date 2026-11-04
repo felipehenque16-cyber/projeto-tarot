@@ -187,7 +187,7 @@
 .deck-draw-area{display:flex;flex-direction:column;align-items:center}
 .deck-draw-area .draw-instruction{text-align:center;max-width:560px}
 .deck-progress{margin-top:15px;font-size:11px;letter-spacing:.5px;color:#8b795e}
-.deck-picker{width:100%;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:clamp(8px,2vw,18px);margin:34px auto 12px;max-width:920px}
+.deck-picker{width:100%;display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:clamp(6px,1.2vw,12px);margin:34px auto 12px;max-width:1120px}
 .deck-pick-card{position:relative;width:100%;aspect-ratio:180/260;padding:0;border:0;background:transparent;perspective:900px;cursor:pointer}
 .deck-pick-inner{position:absolute;inset:0;display:block;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.75,.25,1)}
 .deck-pick-card:hover .deck-pick-inner{transform:translateY(-8px) rotateY(7deg)}
@@ -199,6 +199,6 @@
 .deck-pick-front .tarot-art{width:100%;height:100%;object-fit:contain}
 .deck-pick-card:disabled{cursor:default}
 .deck-pick-card:focus-visible{outline:3px solid #b58b68;outline-offset:4px}
-@media(max-width:760px){.deck-picker{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}}
-@media(max-width:460px){.deck-picker{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}}
+@media(max-width:760px){.deck-picker{grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}}
+@media(max-width:460px){.deck-picker{grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}}
 @media(prefers-reduced-motion:reduce){.deck-pick-inner{transition:none}}
