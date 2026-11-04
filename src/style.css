@@ -54,3 +54,66 @@
 .constellation-finish>small{display:block;font-size:9px;line-height:1.7;color:#858b7c}
 .constellation-finish .reset-button{margin-left:0}
 @media(max-width:760px){.constellation-journal{padding:21px 16px}.constellation-journal h3{font-size:21px}.constellation-journal-actions{align-items:stretch}.constellation-journal-actions .primary-button{padding:13px 14px;gap:8px}}
+
+/* Nova experiência integrada de constelação */
+.constellation-form-panel{max-width:850px;margin-left:auto;margin-right:auto;padding:38px 42px}
+.constellation-form-intro{display:flex;align-items:center;gap:20px;max-width:590px;margin:0 auto 30px}
+.constellation-form-symbol{flex:0 0 58px;width:58px;height:58px;border:1px solid #c9b58f;border-radius:50%;display:grid;place-items:center;color:#b17e5d;font-size:27px}
+.constellation-form-intro .constellation-label{text-align:left;margin:0 0 7px}
+.constellation-form-intro h3{font:500 27px 'Playfair Display',serif;color:#294b3d;margin:0 0 6px}
+.constellation-form-intro p{font-size:11px;line-height:1.7;color:#7b8175;margin:0}
+.constellation-fields{display:grid;grid-template-columns:1fr 1fr;gap:15px;max-width:650px;margin:0 auto 30px}
+.constellation-field{display:flex;flex-direction:column;gap:9px}
+.constellation-field>span{font-size:8px;letter-spacing:1.5px;color:#858b7c}
+.constellation-field input{width:100%;min-width:0;padding:14px 13px;background:#f8f6ef;border:1px solid #d5d7c9;color:#34483b;font:12px 'DM Sans',sans-serif;outline:none}
+.constellation-field input:focus{border-color:#82947b;box-shadow:0 0 0 2px #82947b20}
+.relation-label{margin:0 0 15px}
+.constellation-relation-options{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:650px;margin:0 auto}
+.constellation-relation{position:relative;min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:1px solid #d5d7c9;background:#f7f5ed;color:#526b58;cursor:pointer;transition:.2s}
+.constellation-relation:hover{border-color:#9da98f;transform:translateY(-2px)}
+.constellation-relation.selected{background:#e5e8dc;border:1px solid #71856c;box-shadow:inset 0 0 0 1px #71856c}
+.constellation-relation>span{font:30px 'Playfair Display',serif;color:#b17e5d}
+.constellation-relation>b{font:500 19px 'Playfair Display',serif}
+.constellation-relation>small{font-size:9px;color:#858b7c}
+.constellation-relation>i{position:absolute;right:10px;top:9px;width:19px;height:19px;border:1px solid #c8cbb9;border-radius:50%;display:grid;place-items:center;font:normal 11px 'DM Sans',sans-serif}
+.constellation-relation.selected>i{background:#294b3d;color:#fff;border-color:#294b3d}
+.constellation-submit-row{max-width:650px;margin:25px auto 0;display:flex;justify-content:space-between;align-items:center;gap:15px}
+.constellation-submit-row>p{font-size:9px;line-height:1.6;color:#858b7c;margin:0}
+.constellation-submit-row .primary-button:disabled{opacity:.4;cursor:not-allowed;pointer-events:none}
+.constellation-reading{max-width:700px;margin:38px auto 0;padding:28px;background:#e5e6d9;border-top:1px solid #c9b58f;animation:appear .4s ease both}
+.constellation-reading-top{display:flex;justify-content:space-between;color:#a47758;font-size:8px;letter-spacing:1.5px}
+.constellation-reading-top span:last-child{font-size:18px}
+.constellation-reading h3{font:500 30px/1.25 'Playfair Display',serif;color:#294b3d;margin:17px 0 7px}
+.constellation-reading-meta{font-size:9px;color:#858b7c}
+.constellation-reading-opening{font:italic 15px/1.8 'Playfair Display',serif;color:#586d59;margin:22px 0}
+.constellation-reading-connections{display:grid;gap:13px}
+.constellation-connection{padding:20px;background:#f3f1e8;border:1px solid #d9dbce}
+.constellation-connection>span{font-size:8px;letter-spacing:1.2px;color:#b17e5d}
+.constellation-connection h4{font:500 22px 'Playfair Display',serif;color:#294b3d;margin:9px 0}
+.constellation-connection>p,.constellation-connection>div>p{font-size:11px;line-height:1.85;color:#6f776b}
+.constellation-connection blockquote{font:italic 16px/1.6 'Playfair Display',serif;color:#526b58;border-left:1px solid #c88c62;padding-left:14px;margin:17px 0}
+.constellation-connection>div{border-top:1px solid #deded1;padding-top:13px}
+.constellation-connection>div>b{font-size:9px;color:#294b3d}
+.constellation-connection>div>p{margin:6px 0 0}
+.constellation-integrated-note{display:flex;gap:14px;margin:17px 0;padding:18px;background:#294b3d;color:#f2f0e5}
+.constellation-integrated-note>span{font-size:23px;color:#d6c49f}
+.constellation-integrated-note b{font:500 17px 'Playfair Display',serif}
+.constellation-integrated-note p{font-size:10px;line-height:1.8;color:#d4dbcf;margin:7px 0 0}
+.constellation-reading>.reset-button{margin:8px 0 0}
+@media(max-width:760px){
+.constellation-form-panel{padding:25px 17px}
+.constellation-form-intro{align-items:flex-start;gap:13px}
+.constellation-form-symbol{flex-basis:43px;width:43px;height:43px;font-size:21px}
+.constellation-form-intro h3{font-size:23px}
+.constellation-fields{grid-template-columns:1fr;gap:13px}
+.constellation-relation-options{gap:7px}
+.constellation-relation{min-height:116px}
+.constellation-relation>b{font-size:17px}
+.constellation-relation>small{font-size:8px}
+.constellation-submit-row{align-items:stretch;flex-direction:column}
+.constellation-submit-row .primary-button{justify-content:center}
+.constellation-reading{padding:20px 15px}
+.constellation-reading h3{font-size:26px}
+.constellation-reading-opening{font-size:14px}
+.constellation-connection{padding:17px 14px}
+}
