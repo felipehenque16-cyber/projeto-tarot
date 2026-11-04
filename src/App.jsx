@@ -48,6 +48,8 @@ function App() {
   const [constellationRelations, setConstellationRelations] = useState(['pai', 'mae', 'conjuge']);
   const [constellationResult, setConstellationResult] = useState(false);
   const [constellationAnswers, setConstellationAnswers] = useState({});
+  const [deckPool, setDeckPool] = useState([]);
+  const [selectedCards, setSelectedCards] = useState([]);
   const [constellationRelationNames, setConstellationRelationNames] = useState({pai:'',mae:'',conjuge:''});
   const relationContent = {
     pai: {
@@ -81,10 +83,24 @@ function App() {
       : [...current, relation]);
     setConstellationResult(false);
   };
-  const drawCard = () => {
-    if (mode !== 'single') { const deck = [...fullDeck].sort(() => Math.random() - 0.5); setSpread(deck.slice(0, mode === 'five' ? 5 : 3)); setDrawn(null); }
-    else { let next = fullDeck[Math.floor(Math.random() * fullDeck.length)]; if (drawn) while (next.name === drawn.name) next = fullDeck[Math.floor(Math.random() * fullDeck.length)]; setDrawn(next); setSpread([]); }
-    window.setTimeout(() => document.getElementById('reading')?.scrollIntoView({behavior:'smooth',block:'start'}), 100);
+  const startDeck = () => {
+    const shuffled = [...fullDeck].sort(() => Math.random() - 0.5);
+    setDeckPool(shuffled.slice(0, 12));
+    setSelectedCards([]);
+    setDrawn(null);
+    setSpread([]);
+  };
+  const selectDeckCard = (card) => {
+    if (selectedCards.some(item => item.name === card.name)) return;
+    const next = [...selectedCards, card];
+    setSelectedCards(next);
+    const target = mode === 'single' ? 1 : mode === 'three' ? 3 : 5;
+    if (next.length === target) {
+      if (target === 1) setDrawn(card);
+      else setSpread(next);
+      setDeckPool([]);
+      window.setTimeout(() => document.getElementById('reading')?.scrollIntoView({behavior:'smooth',block:'start'}), 150);
+    }
   };
 
   return <div className="site-shell">
@@ -186,20 +202,29 @@ function App() {
               </div>
               <p className="constellation-map-caption">Este mapa é simbólico: não representa hierarquia, proximidade ou qualidade dos relacionamentos.</p>
             </div>
+            <div className="constellation-dossier-intro">
+              <span>DOSSIÊ SISTÊMICO E REFLEXIVO</span>
+              <h4>Uma leitura integrada da sua história</h4>
+              <p>Este material organiza temas simbólicos ligados aos vínculos informados. Ele não calcula compatibilidade, não determina traços de personalidade e não identifica fatos ocultos sobre familiares. Use as interpretações como possibilidades de reflexão, nunca como diagnóstico ou sentença.</p>
+            </div>
+            <div className="dossier-overview-grid">
+              <article><span>01 · PERTENCIMENTO</span><h4>O lugar de cada história</h4><p>As relações familiares podem influenciar a forma como construímos pertencimento e identidade. Reconhecer a própria história não significa concordar com tudo o que aconteceu, justificar atitudes prejudiciais ou abrir mão de limites.</p></article>
+              <article><span>02 · EQUILÍBRIO</span><h4>Dar, receber e reciprocidade</h4><p>Relações sustentáveis precisam de troca possível, respeito e responsabilidade compartilhada. Observe se existe espaço para pedir ajuda, dizer não, reparar conflitos e reconhecer as necessidades de cada pessoa.</p></article>
+              <article><span>03 · ORDEM E LIMITES</span><h4>Vínculos sem perder a autonomia</h4><p>É possível amar a família e, ao mesmo tempo, construir escolhas próprias. Limites saudáveis ajudam a diferenciar responsabilidades, proteger a intimidade e cultivar relações adultas com respeito mútuo.</p></article>
+            </div>
             <div className="constellation-reading-connections">
               {constellationRelations.map((relation,index)=><article className="constellation-connection" key={relation}>
                 <span>0{index+1} · {relationContent[relation].theme.toUpperCase()}</span>
                 <h4>{relationContent[relation].title} · {constellationRelationNames[relation]}</h4>
                 <p>{relationContent[relation].reflection}</p>
-                <blockquote>{relationContent[relation].question}</blockquote>
-                <div className="constellation-guided">
-                  <b>Perguntas para explorar</b>
-                  <ol>{relationContent[relation].prompts.map((prompt,i)=><li key={i}>{prompt}</li>)}</ol>
-                  <label htmlFor={`reflection-${relation}`}>Anotações sobre este vínculo</label>
-                  <textarea id={`reflection-${relation}`} value={constellationAnswers[relation] || ''} onChange={(event)=>setConstellationAnswers(current=>({...current,[relation]:event.target.value}))} placeholder="Escreva livremente. Você não precisa responder a tudo agora." rows={4}/>
-                  <small>Suas anotações ficam apenas nesta página enquanto ela estiver aberta.</small>
+                <div className="dossier-block">
+                  <h5>Leitura do vínculo</h5>
+                  <p>{relationContent[relation].reflection}</p>
+                  <h5>Possíveis temas para observar</h5>
+                  <p>{relationContent[relation].theme}. Considere como esse vínculo aparece na sua história, quais aprendizados deseja preservar e quais padrões prefere transformar. Não existe uma interpretação única: sua experiência concreta é mais importante do que qualquer descrição pronta.</p>
+                  <h5>Um movimento possível</h5>
+                  <p>{relationContent[relation].invitation}</p>
                 </div>
-                <div><b>Um convite para refletir</b><p>{relationContent[relation].invitation}</p></div>
               </article>)}
             </div>
             <div className="constellation-integrated-note"><span>✧</span><div><b>Olhando para o conjunto</b><p>Esses vínculos podem se relacionar de maneiras diferentes na sua trajetória. Observe quais sentimentos, valores ou necessidades aparecem em comum — e também o que torna cada relação única. Você pode acolher sua história sem deixar que ela determine seus próximos passos.</p></div></div>
@@ -213,12 +238,23 @@ function App() {
         <div className="reading-heading"><div className="section-kicker"><span/> SEU MOMENTO, SUA PERGUNTA</div><h2>O que merece sua <em>atenção hoje?</em></h2><p>Feche os olhos por alguns segundos. Pense em algo que gostaria de compreender melhor.</p></div>
         <div className="reading-choices">
           <div className="choice-label">ESCOLHA O FOCO DA SUA REFLEXÃO</div>
-          <div className="topic-options">{[['autoconhecimento','Olhar para mim'],['amor','Amor e relações'],['trabalho','Trabalho e caminhos'],['decisoes','Escolhas e mudanças']].map(([v,l])=><button key={v} className={focus===v?'topic-option selected':'topic-option'} onClick={()=>{setFocus(v);setDrawn(null);setSpread([])}}>{l}</button>)}</div>
-          <div className="mode-options"><button className={mode==='single'?'mode-option selected':'mode-option'} onClick={()=>{setMode('single');setDrawn(null);setSpread([])}}>Uma carta<small>um olhar para o agora</small></button><button className={mode==='three'?'mode-option selected':'mode-option'} onClick={()=>{setMode('three');setDrawn(null);setSpread([])}}>Três cartas<small>passado · presente · possibilidades</small></button><button className={mode==='five'?'mode-option selected':'mode-option'} onClick={()=>{setMode('five');setDrawn(null);setSpread([])}}>Cinco cartas<small>uma visão mais ampla do momento</small></button></div>
+          <div className="topic-options">{[['autoconhecimento','Olhar para mim'],['amor','Amor e relações'],['trabalho','Trabalho e caminhos'],['decisoes','Escolhas e mudanças']].map(([v,l])=><button key={v} className={focus===v?'topic-option selected':'topic-option'} onClick={()=>{setFocus(v);setDrawn(null);setSpread([]);setDeckPool([]);setSelectedCards([])}}>{l}</button>)}</div>
+          <div className="mode-options"><button className={mode==='single'?'mode-option selected':'mode-option'} onClick={()=>{setMode('single');setDrawn(null);setSpread([]);setDeckPool([]);setSelectedCards([])}}>Uma carta<small>um olhar para o agora</small></button><button className={mode==='three'?'mode-option selected':'mode-option'} onClick={()=>{setMode('three');setDrawn(null);setSpread([]);setDeckPool([]);setSelectedCards([])}}>Três cartas<small>passado · presente · possibilidades</small></button><button className={mode==='five'?'mode-option selected':'mode-option'} onClick={()=>{setMode('five');setDrawn(null);setSpread([]);setDeckPool([]);setSelectedCards([])}}>Cinco cartas<small>uma visão mais ampla do momento</small></button></div>
         </div>
-        <div className="draw-area">
-          <div className={drawn?'flip-card is-flipped':'flip-card'}><div className="flip-card-inner"><div className="flip-face flip-back"><div className="deck-pattern"><span>✳</span><i>✧</i><b>☾</b><small>LUME</small></div></div><div className="flip-face flip-front"><div className="front-frame">{drawn && <TarotArtwork card={drawn} />}</div></div></div></div>
-          <div className="draw-instruction"><span className="tiny-star">✳</span><h3>{drawn||spread.length?'Sua tiragem está aqui.':'Quando sentir que é a hora...'}</h3><p>{drawn||spread.length?'Leia sem pressa. Fique com o que conversar com você.':'Não existe escolha certa. Apenas um convite para olhar para dentro.'}</p><button className="primary-button" onClick={drawCard}>{drawn||spread.length?'Fazer nova tiragem':mode==='five'?'Revelar as cinco cartas':mode==='three'?'Revelar as três cartas':'Revelar minha carta'} <ArrowRight size={17}/></button>{(drawn||spread.length>0)&&<button className="reset-button" onClick={()=>{setDrawn(null);setSpread([])}}><RotateCcw size={14}/> Recomeçar</button>}</div>
+        <div className="draw-area deck-draw-area">
+          <div className="draw-instruction"><span className="tiny-star">✳</span><h3>{drawn||spread.length?'Sua tiragem está pronta.':deckPool.length?'Escolha suas cartas.':'O deck está esperando por você.'}</h3><p>{drawn||spread.length?'As cartas que você escolheu estão reveladas abaixo.':'Clique nas cartas viradas para escolher. Cada uma será revelada individualmente.'}</p>
+            {!deckPool.length&&<button className="primary-button" onClick={startDeck}>{drawn||spread.length?'Fazer nova tiragem':'Abrir o deck'} <ArrowRight size={17}/></button>}
+            {deckPool.length>0&&<div className="deck-progress">Você escolheu {selectedCards.length} de {mode==='single'?1:mode==='three'?3:5} cartas</div>}
+            {(drawn||spread.length>0)&&<button className="reset-button" onClick={()=>{setDrawn(null);setSpread([]);setDeckPool([]);setSelectedCards([])}}><RotateCcw size={14}/> Recomeçar</button>}
+          </div>
+          {deckPool.length>0&&<div className="deck-picker" aria-label="Escolha suas cartas">
+            {deckPool.map((card,index)=>{
+              const chosen=selectedCards.some(item=>item.name===card.name);
+              return <button type="button" key={card.name} className={chosen?'deck-pick-card revealed':'deck-pick-card'} onClick={()=>selectDeckCard(card)} disabled={chosen||selectedCards.length>=(mode==='single'?1:mode==='three'?3:5)} aria-label={chosen?card.name:'Revelar esta carta'}>
+                <span className="deck-pick-inner"><span className="deck-pick-back"><span>✳</span><i>✧</i><b>☾</b><small>LUME</small></span><span className="deck-pick-front"><TarotArtwork card={card} compact/></span></span>
+              </button>;
+            })}
+          </div>}
         </div>
         {spread.length>=3&&<div className="result spread-result" id="reading">
           <div className="result-top"><span>SUA TIRAGEM • {spread.length} CARTAS</span><span className="result-tag">FOCO: {focus.toUpperCase()}</span></div>
