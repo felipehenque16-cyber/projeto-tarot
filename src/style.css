@@ -167,3 +167,38 @@
 .constellation-map-node>b{max-width:108px;padding:0 5px;overflow-wrap:anywhere;text-align:center}
 .constellation-map-partner>b{max-width:108px;padding:0 5px;overflow-wrap:anywhere;text-align:center}
 @media(max-width:760px){.constellation-related-names{padding:17px 12px}.constellation-person-fields{grid-template-columns:1fr}}
+
+
+/* Dossiê reflexivo sem questionário */
+.constellation-dossier-intro{margin:28px 0 18px;padding:25px 24px;background:#f3f0e6;border-left:3px solid #b58b68}
+.constellation-dossier-intro>span,.dossier-overview-grid article>span{font-size:9px;letter-spacing:1.6px;color:#8c775c}
+.constellation-dossier-intro h4,.dossier-overview-grid h4{font:500 23px 'Playfair Display',serif;color:#405b49;margin:9px 0}
+.constellation-dossier-intro p,.dossier-overview-grid p{font-size:12px;line-height:1.85;color:#697064;margin:0}
+.dossier-overview-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0 28px}
+.dossier-overview-grid article{padding:19px 17px;background:#f8f7f1;border:1px solid #e3e0d4}
+.dossier-overview-grid h4{font-size:19px}
+.dossier-block{margin:17px 0 0;padding:17px 18px;background:#f6f4ed;border-left:2px solid #b58b68}
+.dossier-block h5{font:500 16px 'Playfair Display',serif;color:#405b49;margin:13px 0 5px}
+.dossier-block h5:first-child{margin-top:0}
+.dossier-block p{font-size:12px;line-height:1.8;color:#687064;margin:0 0 8px}
+@media(max-width:760px){.dossier-overview-grid{grid-template-columns:1fr}.constellation-dossier-intro{padding:20px 16px}}
+
+/* Deck interativo: a pessoa escolhe e revela cada carta */
+.deck-draw-area{display:flex;flex-direction:column;align-items:center}
+.deck-draw-area .draw-instruction{text-align:center;max-width:560px}
+.deck-progress{margin-top:15px;font-size:11px;letter-spacing:.5px;color:#8b795e}
+.deck-picker{width:100%;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:clamp(8px,2vw,18px);margin:34px auto 12px;max-width:920px}
+.deck-pick-card{position:relative;width:100%;aspect-ratio:180/260;padding:0;border:0;background:transparent;perspective:900px;cursor:pointer}
+.deck-pick-inner{position:absolute;inset:0;display:block;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.75,.25,1)}
+.deck-pick-card:hover .deck-pick-inner{transform:translateY(-8px) rotateY(7deg)}
+.deck-pick-card.revealed .deck-pick-inner{transform:rotateY(180deg)}
+.deck-pick-back,.deck-pick-front{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:1px solid #b99b6c;box-shadow:0 7px 18px #18271d24}
+.deck-pick-back{flex-direction:column;gap:10px;background:linear-gradient(145deg,#294b3d,#1b352b);color:#d8c49a;outline:1px solid #c8ad7c;outline-offset:-7px}
+.deck-pick-back span{font-size:25px}.deck-pick-back i{font-size:20px;font-style:normal}.deck-pick-back b{font-size:33px;font-weight:400}.deck-pick-back small{font-size:8px;letter-spacing:3px}
+.deck-pick-front{transform:rotateY(180deg);background:#e9dfc7;padding:3px}
+.deck-pick-front .tarot-art{width:100%;height:100%;object-fit:contain}
+.deck-pick-card:disabled{cursor:default}
+.deck-pick-card:focus-visible{outline:3px solid #b58b68;outline-offset:4px}
+@media(max-width:760px){.deck-picker{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}}
+@media(max-width:460px){.deck-picker{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}}
+@media(prefers-reduced-motion:reduce){.deck-pick-inner{transition:none}}
