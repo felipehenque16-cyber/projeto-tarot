@@ -158,3 +158,12 @@
 .constellation-guided textarea:focus{border-color:#8c9a83;box-shadow:0 0 0 2px #8c9a8325}
 .constellation-guided textarea::placeholder{color:#a2a294}
 .constellation-guided>small{display:block;margin-top:7px;font-size:9px;line-height:1.5;color:#8b8d80}
+
+
+/* Identificação das pessoas nos vínculos selecionados */
+.constellation-related-names{max-width:650px;margin:27px auto 0;padding:20px 18px;background:#e8e9de;border:1px solid #d5d7c9}
+.constellation-related-names>p{text-align:center;font-size:10px;line-height:1.6;color:#7b8175;margin:-5px 0 17px}
+.constellation-person-fields{margin-bottom:0}
+.constellation-map-node>b{max-width:108px;padding:0 5px;overflow-wrap:anywhere;text-align:center}
+.constellation-map-partner>b{max-width:108px;padding:0 5px;overflow-wrap:anywhere;text-align:center}
+@media(max-width:760px){.constellation-related-names{padding:17px 12px}.constellation-person-fields{grid-template-columns:1fr}}
