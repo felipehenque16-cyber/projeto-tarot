@@ -117,3 +117,32 @@
 .constellation-reading-opening{font-size:14px}
 .constellation-connection{padding:17px 14px}
 }
+
+
+/* Mapa simbólico dos vínculos familiares */
+.constellation-family-map{max-width:620px;margin:28px auto 25px;padding:22px 18px 17px;background:#f3f1e8;border:1px solid #d9dbce}
+.constellation-map-heading{text-align:center}
+.constellation-map-heading>span{font-size:8px;letter-spacing:1.5px;color:#a47758}
+.constellation-map-heading>p{font:italic 13px 'Playfair Display',serif;color:#687766;margin:7px 0 0}
+.constellation-map-stage{position:relative;min-height:270px;display:flex;flex-direction:column;align-items:center;padding:22px 0 12px}
+.constellation-map-parent-row{position:relative;z-index:1;width:100%;display:flex;justify-content:center;gap:clamp(35px,12vw,100px)}
+.constellation-map-node{width:116px;min-height:91px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:#e5e8dc;border:1px solid #c7cdbd;color:#526b58}
+.constellation-map-node>span{font:25px 'Playfair Display',serif;color:#b17e5d}
+.constellation-map-node>b{font:500 16px 'Playfair Display',serif}
+.constellation-map-node>small{font-size:8px;color:#858b7c}
+.constellation-map-connector{width:1px;background:#b9a989}
+.constellation-map-parent-connector{height:25px}
+.constellation-map-self{position:relative;z-index:1;width:130px;height:105px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:#294b3d;border:1px solid #c9b58f;box-shadow:0 0 0 6px #e8e5d9;color:#f3f1e8}
+.constellation-map-self>span{font-size:19px;color:#d6c49f}
+.constellation-map-self>b{font:500 17px 'Playfair Display',serif;max-width:112px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.constellation-map-self>small{font-size:7px;letter-spacing:1.7px;color:#d6c49f}
+.constellation-map-partner-connector{height:24px}
+.constellation-map-partner{position:relative;z-index:1}
+.constellation-map-caption{text-align:center;font-size:8px;line-height:1.6;color:#858b7c;margin:3px 0 0}
+@media(max-width:540px){
+ .constellation-family-map{padding:18px 9px 14px}
+ .constellation-map-stage{min-height:250px}
+ .constellation-map-node{width:100px;min-height:85px}
+ .constellation-map-self{width:118px;height:96px}
+ .constellation-map-parent-row{gap:35px}
+}
