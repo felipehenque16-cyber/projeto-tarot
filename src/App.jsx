@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { minorCards } from './minorArcana.js';
 import TarotArtwork from './TarotArtwork.jsx';
 import { ArrowDown, ArrowRight, RotateCcw, Sparkles, Sun, MoonStar, Leaf, Menu, X } from 'lucide-react';
@@ -43,29 +43,39 @@ function App() {
   const [mode, setMode] = useState('single');
   const [focus, setFocus] = useState('autoconhecimento');
   const [menuOpen, setMenuOpen] = useState(false);
-  const [constellationTheme, setConstellationTheme] = useState('pertencimento');
-  const [constellationStep, setConstellationStep] = useState(false);
-  const [constellationStage, setConstellationStage] = useState(0);
-  const [constellationNotes, setConstellationNotes] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('lume-constellation-notes') || '{}'); }
-    catch { return {}; }
-  });
-  useEffect(() => {
-    localStorage.setItem('lume-constellation-notes', JSON.stringify(constellationNotes));
-  }, [constellationNotes]);
-  const constellationThemes = {
-    pertencimento: {label:'Pertencimento', question:'Em quais espaços você sente que pode ser quem é?', prompt:'Que partes da sua história merecem ser reconhecidas sem julgamento?', note:'Pertencer não precisa significar caber em todos os lugares. Também pode ser encontrar relações onde exista espaço para ser você.'},
-    familia: {label:'História familiar', question:'Que lembranças da sua história familiar estão presentes no seu momento atual?', prompt:'Quais valores você deseja levar adiante — e quais gostaria de ressignificar?', note:'Olhar para a própria história não significa encontrar culpados. É uma oportunidade de reconhecer experiências e escolher o que faz sentido construir daqui em diante.'},
-    relacoes: {label:'Relações', question:'O que você tem percebido sobre a forma como se relaciona?', prompt:'Que necessidade, limite ou conversa merece mais atenção?', note:'Relações são construídas por pessoas diferentes. Observe o que está ao seu alcance comunicar, cuidar e transformar.'},
-    ciclos: {label:'Ciclos e mudanças', question:'Que ciclo da sua vida parece estar pedindo atenção?', prompt:'O que você gostaria de encerrar, preservar ou começar de outro jeito?', note:'Mudanças podem trazer sentimentos misturados. Você não precisa resolver tudo de uma vez: reconhecer o momento já pode ser um começo.'}
+  const [constellationName, setConstellationName] = useState('');
+  const [constellationBirthDate, setConstellationBirthDate] = useState('');
+  const [constellationRelations, setConstellationRelations] = useState(['pai', 'mae', 'conjuge']);
+  const [constellationResult, setConstellationResult] = useState(false);
+  const relationContent = {
+    pai: {
+      title: 'O vínculo com a figura paterna',
+      theme: 'origem, referências e autonomia',
+      reflection: 'A relação com a figura paterna pode tocar temas como reconhecimento, segurança, limites e a maneira como aprendemos a ocupar nosso espaço. Cada história é única: vale observar tanto o que foi oferecido quanto aquilo que você sentiu falta, sem reduzir toda a relação a uma única lembrança.',
+      question: 'Que aprendizados dessa relação você deseja manter — e quais gostaria de construir de outro jeito?',
+      invitation: 'Reconheça o que essa história representa para você. Sua trajetória também pode incluir escolhas próprias, limites e novas referências.'
+    },
+    mae: {
+      title: 'O vínculo com a figura materna',
+      theme: 'cuidado, acolhimento e identidade',
+      reflection: 'A relação com a figura materna pode despertar reflexões sobre cuidado, afeto, pertencimento e expectativas. Nem todas as experiências são iguais, e é possível reconhecer sentimentos diferentes ao mesmo tempo, sem precisar encontrar uma explicação definitiva para eles.',
+      question: 'Quais formas de cuidado fizeram sentido para você e de que cuidado sente necessidade hoje?',
+      invitation: 'Permita-se reconhecer suas necessidades atuais. Cuidar de si também pode significar estabelecer limites e construir formas próprias de acolhimento.'
+    },
+    conjuge: {
+      title: 'O vínculo com seu cônjuge',
+      theme: 'parceria, reciprocidade e escolhas',
+      reflection: 'Uma relação conjugal é construída no encontro entre duas histórias, com expectativas, valores e maneiras diferentes de demonstrar afeto. Olhar para esse vínculo pode ajudar a perceber como vocês dialogam, dividem responsabilidades e preservam a individualidade dentro da parceria.',
+      question: 'O que fortalece a parceria de vocês e que conversa merece mais espaço neste momento?',
+      invitation: 'Escolha um gesto possível de diálogo ou cuidado mútuo. Uma relação saudável também precisa de respeito, autonomia e espaço para cada pessoa ser quem é.'
+    }
   };
-  const constellationStages = [
-    {label:'MINHA HISTÓRIA', title:'O que da sua história merece ser acolhido?', hint:'Escreva uma lembrança, um valor ou algo que você reconhece como parte da sua trajetória.'},
-    {label:'EU, AGORA', title:'Como essa história aparece no seu presente?', hint:'Observe sentimentos, necessidades e escolhas atuais, sem se cobrar por encontrar uma resposta definitiva.'},
-    {label:'MEUS CAMINHOS', title:'O que você deseja levar adiante a partir daqui?', hint:'Registre um cuidado, limite ou pequeno passo que faça sentido para você.'}
-  ];
-  const noteKey = (stage) => `${constellationTheme}-${stage}`;
-  const updateConstellationNote = (value) => setConstellationNotes(current => ({...current, [noteKey(constellationStage)]:value}));
+  const toggleConstellationRelation = (relation) => {
+    setConstellationRelations(current => current.includes(relation)
+      ? current.filter(item => item !== relation)
+      : [...current, relation]);
+    setConstellationResult(false);
+  };
   const drawCard = () => {
     if (mode !== 'single') { const deck = [...fullDeck].sort(() => Math.random() - 0.5); setSpread(deck.slice(0, mode === 'five' ? 5 : 3)); setDrawn(null); }
     else { let next = fullDeck[Math.floor(Math.random() * fullDeck.length)]; if (drawn) while (next.name === drawn.name) next = fullDeck[Math.floor(Math.random() * fullDeck.length)]; setDrawn(next); setSpread([]); }
@@ -118,36 +128,50 @@ function App() {
 
       <section className="constellation-section" id="constelacao">
         <div className="constellation-heading">
-          <div className="section-kicker light">UM OLHAR PARA AS SUAS RAÍZES <span>✳</span></div>
-          <h2>Há histórias que merecem ser <em>olhadas com carinho.</em></h2>
-          <p>Um exercício simbólico de reflexão sobre vínculos, pertencimento e caminhos pessoais. Sem diagnósticos, respostas prontas ou julgamentos.</p>
+          <div className="section-kicker light">UM OLHAR PARA OS SEUS VÍNCULOS <span>✳</span></div>
+          <h2>Nossa história também vive nos <em>laços que construímos.</em></h2>
+          <p>Uma experiência de reflexão sobre relações importantes da sua vida. Informe seus dados e escolha os vínculos que deseja explorar — juntos, em uma única leitura.</p>
         </div>
-        <div className="constellation-panel">
-          <div className="constellation-label">ESCOLHA UM TEMA PARA EXPLORAR</div>
-          <div className="constellation-options">
-            {Object.entries(constellationThemes).map(([key,item])=><button key={key} className={constellationTheme===key?'constellation-option selected':'constellation-option'} onClick={()=>{setConstellationTheme(key);setConstellationStep(false);setConstellationStage(0)}}>{item.label}</button>)}
+        <div className="constellation-panel constellation-form-panel">
+          <div className="constellation-form-intro">
+            <span className="constellation-form-symbol">✳</span>
+            <div><div className="constellation-label">SUA JORNADA COMEÇA AQUI</div><h3>Vamos olhar para a sua história?</h3><p>Preencha seus dados e escolha um ou mais vínculos para a leitura integrada.</p></div>
           </div>
-          <div className="constellation-orbit" aria-label="Representação simbólica de três dimensões da reflexão">
-            <div className="orbit-line"/>
-            <div className="constellation-node node-past"><span>✧</span><small>MINHA HISTÓRIA</small></div>
-            <div className="constellation-node node-self"><span>✳</span><small>EU, AGORA</small></div>
-            <div className="constellation-node node-future"><span>☼</span><small>MEUS CAMINHOS</small></div>
+          <div className="constellation-fields">
+            <label className="constellation-field"><span>SEU NOME</span><input type="text" value={constellationName} onChange={event=>{setConstellationName(event.target.value);setConstellationResult(false)}} placeholder="Como gostaria de ser chamado(a)?" maxLength="80" /></label>
+            <label className="constellation-field"><span>SUA DATA DE NASCIMENTO</span><input type="date" value={constellationBirthDate} onChange={event=>{setConstellationBirthDate(event.target.value);setConstellationResult(false)}} max={new Date().toISOString().slice(0,10)} /></label>
           </div>
-          <div className="constellation-question"><span>UM PONTO DE PARTIDA</span><h3>{constellationThemes[constellationTheme].question}</h3><button className="primary-button" onClick={()=>{setConstellationStep(!constellationStep);setConstellationStage(0)}}>{constellationStep?'Recolher reflexão':'Começar a refletir'} <ArrowRight size={16}/></button></div>
-          {constellationStep&&<div className="constellation-journal">
-            <div className="constellation-progress"><span>ETAPA {constellationStage+1} DE 3</span><span>{constellationStages[constellationStage].label}</span></div>
-            <div className="constellation-progress-track"><span style={{width:`${((constellationStage+1)/3)*100}%`}}/></div>
-            <h3>{constellationStages[constellationStage].title}</h3>
-            <p>{constellationStages[constellationStage].hint}</p>
-            <textarea aria-label="Suas anotações desta etapa" value={constellationNotes[noteKey(constellationStage)]||''} onChange={event=>updateConstellationNote(event.target.value)} placeholder="Escreva aqui, no seu tempo..."/>
-            <div className="constellation-journal-actions">
-              <button className="reset-button" onClick={()=>constellationStage===0?setConstellationStep(false):setConstellationStage(stage=>stage-1)}>{constellationStage===0?'Encerrar':'Etapa anterior'}</button>
-              <button className="primary-button" onClick={()=>setConstellationStage(stage=>Math.min(2,stage+1))} disabled={constellationStage===2}>Próxima etapa <ArrowRight size={15}/></button>
+          <div className="constellation-label relation-label">QUAIS VÍNCULOS VOCÊ DESEJA EXPLORAR?</div>
+          <div className="constellation-relation-options">
+            {[
+              {id:'pai',label:'Pai',symbol:'☼',caption:'Figura paterna'},
+              {id:'mae',label:'Mãe',symbol:'☾',caption:'Figura materna'},
+              {id:'conjuge',label:'Cônjuge',symbol:'♡',caption:'Relação conjugal'}
+            ].map(item=><button type="button" key={item.id} className={constellationRelations.includes(item.id)?'constellation-relation selected':'constellation-relation'} onClick={()=>toggleConstellationRelation(item.id)} aria-pressed={constellationRelations.includes(item.id)}><span>{item.symbol}</span><b>{item.label}</b><small>{item.caption}</small><i>{constellationRelations.includes(item.id)?'✓':'+'}</i></button>)}
+          </div>
+          <div className="constellation-submit-row">
+            <p>Você pode selecionar um, dois ou os três vínculos.</p>
+            <button className="primary-button" type="button" disabled={!constellationName.trim() || !constellationBirthDate || constellationRelations.length===0} onClick={()=>setConstellationResult(true)}>Explorar meus vínculos <ArrowRight size={16}/></button>
+          </div>
+          {constellationResult&&<div className="constellation-reading" aria-live="polite">
+            <div className="constellation-reading-top"><span>LEITURA REFLEXIVA INTEGRADA</span><span>✳</span></div>
+            <h3>Um olhar para a sua história, {constellationName.trim().split(' ')[0]}.</h3>
+            <p className="constellation-reading-meta">Nascimento: {new Date(constellationBirthDate + 'T12:00:00').toLocaleDateString('pt-BR')} · Vínculos escolhidos: {constellationRelations.length}</p>
+            <p className="constellation-reading-opening">Cada vínculo faz parte de uma história maior: a sua. Não é necessário encontrar uma resposta única ou definir alguém como responsável por tudo o que você viveu. O convite é observar o que essas relações significam para você hoje.</p>
+            <div className="constellation-reading-connections">
+              {constellationRelations.map((relation,index)=><article className="constellation-connection" key={relation}>
+                <span>0{index+1} · {relationContent[relation].theme.toUpperCase()}</span>
+                <h4>{relationContent[relation].title}</h4>
+                <p>{relationContent[relation].reflection}</p>
+                <blockquote>{relationContent[relation].question}</blockquote>
+                <div><b>Um convite para refletir</b><p>{relationContent[relation].invitation}</p></div>
+              </article>)}
             </div>
-            {constellationStage===2&&<div className="constellation-finish"><span>✳</span><h4>Um passo de cada vez.</h4><p>{constellationThemes[constellationTheme].note}</p><small>Suas anotações ficam salvas neste navegador e podem ser revisitadas enquanto os dados locais forem mantidos.</small><button className="reset-button" onClick={()=>{setConstellationStep(false);setConstellationStage(0)}}><RotateCcw size={14}/> Finalizar reflexão</button></div>}
+            <div className="constellation-integrated-note"><span>✧</span><div><b>Olhando para o conjunto</b><p>Esses vínculos podem se relacionar de maneiras diferentes na sua trajetória. Observe quais sentimentos, valores ou necessidades aparecem em comum — e também o que torna cada relação única. Você pode acolher sua história sem deixar que ela determine seus próximos passos.</p></div></div>
+            <button className="reset-button" onClick={()=>setConstellationResult(false)}><RotateCcw size={14}/> Editar meus dados e vínculos</button>
           </div>}
         </div>
-        <p className="constellation-footnote">Este espaço é educativo e contemplativo; não substitui acompanhamento psicológico, terapêutico ou profissional.</p>
+        <p className="constellation-footnote">Seu nome e data de nascimento servem apenas para personalizar a experiência; não determinam sua personalidade nem revelam fatos sobre sua família. As reflexões são simbólicas e não substituem acompanhamento psicológico ou terapêutico. Os dados não são enviados a um servidor nem salvos após atualizar a página.</p>
       </section>
 
       <section className="reading-section" id="tiragem">
