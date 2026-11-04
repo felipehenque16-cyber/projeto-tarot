@@ -158,6 +158,19 @@ function App() {
             <h3>Um olhar para a sua história, {constellationName.trim().split(' ')[0]}.</h3>
             <p className="constellation-reading-meta">Nascimento: {new Date(constellationBirthDate + 'T12:00:00').toLocaleDateString('pt-BR')} · Vínculos escolhidos: {constellationRelations.length}</p>
             <p className="constellation-reading-opening">Cada vínculo faz parte de uma história maior: a sua. Não é necessário encontrar uma resposta única ou definir alguém como responsável por tudo o que você viveu. O convite é observar o que essas relações significam para você hoje.</p>
+            <div className="constellation-family-map">
+              <div className="constellation-map-heading"><span>MAPA SIMBÓLICO DOS VÍNCULOS</span><p>Uma representação dos laços que você escolheu observar.</p></div>
+              <div className="constellation-map-stage">
+                <div className="constellation-map-parent-row">
+                  {constellationRelations.includes('pai')&&<div className="constellation-map-node"><span>☼</span><b>Pai</b><small>Figura paterna</small></div>}
+                  {constellationRelations.includes('mae')&&<div className="constellation-map-node"><span>☾</span><b>Mãe</b><small>Figura materna</small></div>}
+                </div>
+                {(constellationRelations.includes('pai')||constellationRelations.includes('mae'))&&<div className="constellation-map-connector constellation-map-parent-connector"/>}
+                <div className="constellation-map-self"><span>✧</span><b>{constellationName.trim().split(' ')[0]}</b><small>VOCÊ</small></div>
+                {constellationRelations.includes('conjuge')&&<><div className="constellation-map-connector constellation-map-partner-connector"/><div className="constellation-map-node constellation-map-partner"><span>♡</span><b>Cônjuge</b><small>Parceria</small></div></>}
+              </div>
+              <p className="constellation-map-caption">Este mapa é simbólico: não representa hierarquia, proximidade ou qualidade dos relacionamentos.</p>
+            </div>
             <div className="constellation-reading-connections">
               {constellationRelations.map((relation,index)=><article className="constellation-connection" key={relation}>
                 <span>0{index+1} · {relationContent[relation].theme.toUpperCase()}</span>
