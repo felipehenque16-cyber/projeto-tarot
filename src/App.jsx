@@ -48,6 +48,7 @@ function App() {
   const [constellationRelations, setConstellationRelations] = useState(['pai', 'mae', 'conjuge']);
   const [constellationResult, setConstellationResult] = useState(false);
   const [constellationAnswers, setConstellationAnswers] = useState({});
+  const [constellationRelationNames, setConstellationRelationNames] = useState({pai:'',mae:'',conjuge:''});
   const relationContent = {
     pai: {
       title: 'O vínculo com a figura paterna',
@@ -153,9 +154,19 @@ function App() {
               {id:'conjuge',label:'Cônjuge',symbol:'♡',caption:'Relação conjugal'}
             ].map(item=><button type="button" key={item.id} className={constellationRelations.includes(item.id)?'constellation-relation selected':'constellation-relation'} onClick={()=>toggleConstellationRelation(item.id)} aria-pressed={constellationRelations.includes(item.id)}><span>{item.symbol}</span><b>{item.label}</b><small>{item.caption}</small><i>{constellationRelations.includes(item.id)?'✓':'+'}</i></button>)}
           </div>
+          {constellationRelations.length>0&&<div className="constellation-related-names">
+            <div className="constellation-label">QUEM FAZ PARTE DA SUA HISTÓRIA?</div>
+            <p>Informe o nome de cada pessoa selecionada para personalizar o mapa e a leitura.</p>
+            <div className="constellation-fields constellation-person-fields">
+              {constellationRelations.map(relation=><label className="constellation-field" key={relation}>
+                <span>NOME {relation==='pai'?'DO PAI':relation==='mae'?'DA MÃE':'DO CÔNJUGE'}</span>
+                <input type="text" value={constellationRelationNames[relation]} onChange={event=>{setConstellationRelationNames(current=>({...current,[relation]:event.target.value}));setConstellationResult(false)}} placeholder={relation==='pai'?'Nome do seu pai':relation==='mae'?'Nome da sua mãe':'Nome do seu cônjuge'} maxLength="80"/>
+              </label>)}
+            </div>
+          </div>}
           <div className="constellation-submit-row">
             <p>Você pode selecionar um, dois ou os três vínculos.</p>
-            <button className="primary-button" type="button" disabled={!constellationName.trim() || !constellationBirthDate || constellationRelations.length===0} onClick={()=>setConstellationResult(true)}>Explorar meus vínculos <ArrowRight size={16}/></button>
+            <button className="primary-button" type="button" disabled={!constellationName.trim() || !constellationBirthDate || constellationRelations.length===0 || constellationRelations.some(relation=>!constellationRelationNames[relation]?.trim())} onClick={()=>setConstellationResult(true)}>Explorar meus vínculos <ArrowRight size={16}/></button>
           </div>
           {constellationResult&&<div className="constellation-reading" aria-live="polite">
             <div className="constellation-reading-top"><span>LEITURA REFLEXIVA INTEGRADA</span><span>✳</span></div>
@@ -166,19 +177,19 @@ function App() {
               <div className="constellation-map-heading"><span>MAPA SIMBÓLICO DOS VÍNCULOS</span><p>Uma representação dos laços que você escolheu observar.</p></div>
               <div className="constellation-map-stage">
                 <div className="constellation-map-parent-row">
-                  {constellationRelations.includes('pai')&&<div className="constellation-map-node"><span>☼</span><b>Pai</b><small>Figura paterna</small></div>}
-                  {constellationRelations.includes('mae')&&<div className="constellation-map-node"><span>☾</span><b>Mãe</b><small>Figura materna</small></div>}
+                  {constellationRelations.includes('pai')&&<div className="constellation-map-node"><span>☼</span><b>{constellationRelationNames.pai}</b><small>Pai</small></div>}
+                  {constellationRelations.includes('mae')&&<div className="constellation-map-node"><span>☾</span><b>{constellationRelationNames.mae}</b><small>Mãe</small></div>}
                 </div>
                 {(constellationRelations.includes('pai')||constellationRelations.includes('mae'))&&<div className="constellation-map-connector constellation-map-parent-connector"/>}
                 <div className="constellation-map-self"><span>✧</span><b>{constellationName.trim().split(' ')[0]}</b><small>VOCÊ</small></div>
-                {constellationRelations.includes('conjuge')&&<><div className="constellation-map-connector constellation-map-partner-connector"/><div className="constellation-map-node constellation-map-partner"><span>♡</span><b>Cônjuge</b><small>Parceria</small></div></>}
+                {constellationRelations.includes('conjuge')&&<><div className="constellation-map-connector constellation-map-partner-connector"/><div className="constellation-map-node constellation-map-partner"><span>♡</span><b>{constellationRelationNames.conjuge}</b><small>Cônjuge</small></div></>}
               </div>
               <p className="constellation-map-caption">Este mapa é simbólico: não representa hierarquia, proximidade ou qualidade dos relacionamentos.</p>
             </div>
             <div className="constellation-reading-connections">
               {constellationRelations.map((relation,index)=><article className="constellation-connection" key={relation}>
                 <span>0{index+1} · {relationContent[relation].theme.toUpperCase()}</span>
-                <h4>{relationContent[relation].title}</h4>
+                <h4>{relationContent[relation].title} · {constellationRelationNames[relation]}</h4>
                 <p>{relationContent[relation].reflection}</p>
                 <blockquote>{relationContent[relation].question}</blockquote>
                 <div className="constellation-guided">
