@@ -85,7 +85,7 @@ function App() {
   };
   const startDeck = () => {
     const shuffled = [...fullDeck].sort(() => Math.random() - 0.5);
-    setDeckPool(shuffled.slice(0, 12));
+    setDeckPool(shuffled);
     setSelectedCards([]);
     setDrawn(null);
     setSpread([]);
@@ -142,7 +142,7 @@ function App() {
         <div className="how-heading"><div><div className="section-kicker light">SIMPLES ASSIM <span>✳</span></div><h2>Um instante.<br/><em>Uma nova perspectiva.</em></h2></div><p>Não precisa saber nada sobre tarot. Só chegar como você está.</p></div>
         <div className="steps">
           <article><span className="step-no">01</span><div className="step-icon"><MoonStar/></div><h3>Respire</h3><p>Encontre um lugar tranquilo e pense no momento que está vivendo.</p></article>
-          <article><span className="step-no">02</span><div className="step-icon"><Sparkles/></div><h3>Escolha</h3><p>Com sua intenção em mente, permita que uma carta apareça.</p></article>
+          <article><span className="step-no">02</span><div className="step-icon"><Sparkles/></div><h3>Escolha</h3><p>Com sua intenção em mente, escolha pessoalmente as cartas no deck virado.</p></article>
           <article><span className="step-no">03</span><div className="step-icon"><Sun/></div><h3>Reflita</h3><p>Leia a mensagem, acolha o que fizer sentido e leve sua reflexão com você.</p></article>
         </div>
       </section>
@@ -242,7 +242,7 @@ function App() {
           <div className="mode-options"><button className={mode==='single'?'mode-option selected':'mode-option'} onClick={()=>{setMode('single');setDrawn(null);setSpread([]);setDeckPool([]);setSelectedCards([])}}>Uma carta<small>um olhar para o agora</small></button><button className={mode==='three'?'mode-option selected':'mode-option'} onClick={()=>{setMode('three');setDrawn(null);setSpread([]);setDeckPool([]);setSelectedCards([])}}>Três cartas<small>passado · presente · possibilidades</small></button><button className={mode==='five'?'mode-option selected':'mode-option'} onClick={()=>{setMode('five');setDrawn(null);setSpread([]);setDeckPool([]);setSelectedCards([])}}>Cinco cartas<small>uma visão mais ampla do momento</small></button></div>
         </div>
         <div className="draw-area deck-draw-area">
-          <div className="draw-instruction"><span className="tiny-star">✳</span><h3>{drawn||spread.length?'Sua tiragem está pronta.':deckPool.length?'Escolha suas cartas.':'O deck está esperando por você.'}</h3><p>{drawn||spread.length?'As cartas que você escolheu estão reveladas abaixo.':'Clique nas cartas viradas para escolher. Cada uma será revelada individualmente.'}</p>
+          <div className="draw-instruction"><span className="tiny-star">✳</span><h3>{drawn||spread.length?'Sua tiragem está pronta.':deckPool.length?'Escolha suas cartas.':'O deck está esperando por você.'}</h3><p>{drawn||spread.length?'As cartas que você escolheu estão reveladas abaixo.':'O deck completo está virado para baixo. Clique nas cartas que deseja revelar.'}</p>
             {!deckPool.length&&<button className="primary-button" onClick={startDeck}>{drawn||spread.length?'Fazer nova tiragem':'Abrir o deck'} <ArrowRight size={17}/></button>}
             {deckPool.length>0&&<div className="deck-progress">Você escolheu {selectedCards.length} de {mode==='single'?1:mode==='three'?3:5} cartas</div>}
             {(drawn||spread.length>0)&&<button className="reset-button" onClick={()=>{setDrawn(null);setSpread([]);setDeckPool([]);setSelectedCards([])}}><RotateCcw size={14}/> Recomeçar</button>}
