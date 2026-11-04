@@ -146,3 +146,15 @@
  .constellation-map-self{width:118px;height:96px}
  .constellation-map-parent-row{gap:35px}
 }
+
+
+/* Perguntas guiadas e anotações da constelação */
+.constellation-guided{margin:22px 0 18px;padding:17px 16px;background:#f5f3eb;border-left:2px solid #b58b68}
+.constellation-guided>b{font:500 17px 'Playfair Display',serif;color:#405b49}
+.constellation-guided ol{padding-left:19px;margin:12px 0 17px}
+.constellation-guided li{padding-left:4px;margin:0 0 9px;font-size:12px;line-height:1.7;color:#626b5f}
+.constellation-guided label{display:block;margin-bottom:7px;font-size:10px;letter-spacing:.5px;color:#687766}
+.constellation-guided textarea{display:block;width:100%;min-height:90px;resize:vertical;padding:12px 13px;border:1px solid #d8d8cb;border-radius:0;background:#fffefa;color:#3d4d40;font:12px/1.6 'DM Sans',sans-serif;outline:none}
+.constellation-guided textarea:focus{border-color:#8c9a83;box-shadow:0 0 0 2px #8c9a8325}
+.constellation-guided textarea::placeholder{color:#a2a294}
+.constellation-guided>small{display:block;margin-top:7px;font-size:9px;line-height:1.5;color:#8b8d80}
